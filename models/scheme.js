@@ -1,11 +1,10 @@
 const mongoose  = require('mongoose')
 require('../initDB')
 
-const scheme = new mongoose.Schema({
-    name: String,
-    password: String
+let register = new mongoose.Schema({
+    name: {type: String},
+    password: {type: String}
 })
 
-myScheme = mongoose.model('scheme', scheme);
-
+myScheme = mongoose.model('registration', register);
 module.exports = myScheme

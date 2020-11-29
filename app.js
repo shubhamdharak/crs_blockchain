@@ -1,9 +1,15 @@
 const express = require('express')
+var bodyParser = require('body-parser');
+var expressLayouts = require('express-ejs-layouts');
 const app = express()
 
 app.set('view engine', 'ejs')
+app.set('views','./views')
 
+app.use(bodyParser.json()); 
+app.use(bodyParser.urlencoded({ extended: true })); 
 
+app.use(expressLayouts);
 // web3.eth.getAccounts((error, result)=>{ 
 //   address = result[0]
    

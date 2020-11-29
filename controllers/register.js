@@ -1,18 +1,24 @@
 const myScheme = require('../models/scheme')
+const bcrypt = require('bcrypt')
 
 module.exports = {
     getData: async (req, res)=>{
         const schemas  = await  myScheme.find()
-        // console.log(schemas[0].name);
         res.render('register')
     },
-    register: async(req, res) => {
-        const result = await new myScheme({
-            name: "shubham",
-            password: "shubhamd1"
+    register:  (req, res) => {
+        name = req.body.name
+        password = req.body.password
+        bcrypt.hash(password, 10, (err, hash)=> {
+           if(!err) {
+                user = new myScheme({name:name, password:hash})
+                user.save()
+                res.render('register')
+           }
+           else {
+               console.log(err);
+           }
         })
-        console.log(result);
-        res.render('register', {"name": result.name})
     }
 }
 

@@ -1,0 +1,46 @@
+<%- contentFor('navbar') %>
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <title>CRS-BT</title>
+</head>
+<body>
+<div class="header">
+<nav class="container mx-auto flex items-center justify-between py-4">
+        <div>
+            <a href="/" class="text-bold text-2xl"><b>CRS-BT</b></a>
+        </div>
+        <div>
+            <ul class="flex items-right">
+                <li class="ml-6"><a href="/">Home</a></li>
+                <li class="ml-6"><a href="/">About us</a></li>
+                <li class="ml-6"><a href="/">Contact us</a></li>
+            {% if  not user.is_authenticated %}
+                <li class="ml-6"><a href="{% url 'register' %}">Register</a></li>
+                <li class="ml-6"><a href="{% url 'login' %}">Login</a></li>
+            {% else %}
+                <li class="ml-6 rounded-full border px-2 bg-grey-700">
+                        <span class="m-2 text-red-500">{{request.user|upper}}</span>
+                        <a href="{% url 'logout' %}">Logout</a>
+                </li>
+            {% endif %}
+            </ul>
+        </div>
+    </nav>
+</div>
+    {% block body%}
+    {% endblock %}
+
+    <footer>
+        <p>
+            CRS-BT  &copy;  <script>let y = new Date(); document.write(y.getFullYear())</script>  Made with &hearts;  By Amdar Boys
+        </p>
+    </footer>
+</body>
+</html>
