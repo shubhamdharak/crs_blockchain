@@ -1,0 +1,31 @@
+
+body,html {
+    font-family: 'Lato', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    background-color: #F8F8F8;
+    /* $primary: #FE5F1E;
+    $primary-hover: #b23301;
+    $secondary: #F8F8F8;
+    $pure: #fff;
+    $dark: #232323;
+    $gray: #ccc; */
+}
+
+.header {
+    background-color: #fff;
+}
+
+li > a:hover {
+    color: #b23301;
+}
+
+footer {
+    background-color: #FE5F1E;
+    color : white;
+    position: fixed;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    bottom:0
+}
+

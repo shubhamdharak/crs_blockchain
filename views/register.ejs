@@ -1,19 +1,21 @@
-<%- navbar %>
-<div class="flex justify-end"><h1 class="bg-green-500 text-center rounded text-white text-lg mx-5 px-2 mt-5">You have registered successfully!</h1></div>
 
-<div class="flex justify-end"><h1 class="bg-red-500 text-center rounded text-white text-lg mx-5 px-2 mt-5">Something went wrong! {{error}}</h1></div>
+<%if (messages.success) { %>
+<div class="flex justify-end"><h1 class="bg-green-500 text-center rounded text-white text-lg mx-5 px-2 mt-5"><%= messages.success %></h1></div>
+<% } %>
+<%if (messages.error) { %>
+<div class="flex justify-end"><h1 class="bg-red-500 text-center rounded text-white text-lg mx-5 px-2 mt-5"><%= messages.error %></h1></div>
+<% } %>
 
 <div class="w-full max-w-lg  m-auto">
     <h1 class="text-bold text-4xl text-center underline text-green-600 mt-5 ">Registration</h1>
-    <form method="POST"  class="bg-white shadow-md rounded px-8 pt-6 pb-5 mt-5 mb-5">
-        {% csrf_token %}
+    <form method="POST" action="/register" class="bg-white shadow-md rounded px-8 pt-6 pb-5 mt-5 mb-5">
         <div class="mb-4">
             <label class="block text-gray-700 text-sm font-bold mb-2" for="full_name">
                 Full Name
             </label>
             <input
                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="full_name" name="username" type="text" placeholder="Joe Doe">
+                id="full_name" name="name" type="text" placeholder="Joe Doe">
         </div>
         <div class="mb-4">
             <label class="block text-gray-700 text-sm font-bold mb-2" for="email">
@@ -81,3 +83,4 @@
         <p class="mt-5">Already have account <a href="#" class="font-bold text-blue-800">Login here</a></p>
     </form>
 </div>
+
