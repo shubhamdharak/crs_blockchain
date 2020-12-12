@@ -50,6 +50,9 @@ app.get('/Dashboard', dashboardController.dashboard)
 app.get("/logout",loginController.logout)
 
 
+app.get("/contact",(req,res)=>{
+  res.render("contact");
+})
 
 app.listen(3000, () => {
   console.log("Listening");

@@ -9,22 +9,29 @@
     <link rel="stylesheet" href="utils.css">
     <title>CRS-BT</title>
 </head>
-
 <body>
     <div class="header">
+        <nav class="bg-gray-400">
         <nav class="container mx-auto flex items-center justify-between py-4">
             <div>
                 <a href="/" class="text-bold text-2xl"><b>CRS-BT</b></a>
             </div>
             <div>
                 <ul class="flex items-right">
-                    <li class="ml-6"><a href="/">Home</a></li>
+                    <li class="ml-6 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent ..."><a href="/">Home</a></li>
                     <li class="ml-6"><a href="/">About us</a></li>
-                    <li class="ml-6"><a href="/">Contact us</a></li>
+                    
+                    <li class="ml-6"><a href="/contact">Contact us</a></li>
+
+                    <li class="ml-6"><a href="/register">Register</a></li>
+                    <li class="ml-6"><a href="/login">Login</a></li>
+
+                    <!--li class="ml-6"><a href="/">Contact us</a></li-->
                 <% if(!currentUser) { %>
                     <li class="ml-6"><a href="register">Register</a></li>
                     <li class="ml-6"><a href="login">Login</a></li>
                 <% } else { %>
+                
                     <li class="ml-6 rounded-full border px-2 bg-grey-700">
                         <span class="m-2 text-red-500"><%= currentUser %></span>
                         <a href="logout">Logout</a>
@@ -38,10 +45,23 @@
     <%- body %>
     
     <footer>
-        <p>
+        <!--p>
             CRS-BT &copy;
             <script>let y = new Date(); document.write(y.getFullYear())</script> Made with &hearts; By Amdar Boys
         </p>
+        <div class="tricolor">
+        <hr style="height:10px;border-width:0;color:gray;background-color:rgb(255, 153, 0)">
+        <hr style="height:10px;border-width:0;color:gray;background-color:rgb(255, 255, 255)">
+        <hr style="height:10px;border-width:0;color:gray;background-color:#00ff00">
+        </div--->
+        <div class="orange">
+            <center style="position: absolute;left: 35%;text-shadow: 2px 2px 4px #000000;color: blue;">
+                CRS-BT &copy;
+                <script>let y = new Date(); document.write(y.getFullYear())</script> Made with &hearts; By Amdar Boys
+            </center>
+        </div>
+        <div class="white"></div>
+        <div class="green"></div>
     </footer>
 </body>
 
