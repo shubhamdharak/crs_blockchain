@@ -29,14 +29,14 @@ module.exports = {
                         accountType: accountType,
                         age: age
                     })
-                    user.save().then(res=>{
-                        req.flash('success', "You have successfully registered!")
-                        res.render('register')
-                    })
+                    user.save()
+                    req.flash('success', "You have successfully registered!")
+                    return res.redirect('login')
+                    
                 }
                 else {
                     req.flash('error', "Something went wrong!, try again")
-                    res.render('register')
+                    return res.render('register')
                     console.log(err);
                 }
             })
@@ -44,7 +44,7 @@ module.exports = {
         else {
             req.flash('error', "Password doesn't match, try again")
         }
-        res.render('register')
+        //res.render('register')
     },
     login: (req, res)=> {
         res.render('login')
@@ -53,18 +53,24 @@ module.exports = {
         const email = req.body.email
         const user = await myScheme.findOne({email:email})
         if(user) {
+            //bcrypt.hash(req.body.password,10,(err,hash)=>{console.log(hash)})
             bcrypt.compare(req.body.password, user.password, (err, result)=> {
-                if(result)
-                    res.render('index', {"name": user.name})
+                if(result){
+                   req.session.isValidUser = true
+                   return res.render('index', {"name": user.name})
+                }
+                else{
+                    req.flash('error', "Password not match")
+                    return res.render('login')
+                }
             })
-            req.flash('error', "Password not match")
-            return res.redirect('login')
+            //return res.redirect('login')
         }
         else {
             req.flash('error', "User not found")
             return res.redirect('login')
         }
-        res.render("login")
+        //res.render("login")
     }
 }
 
