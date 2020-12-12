@@ -32,18 +32,23 @@ app.use(flash())
 app.use(expressLayouts);
 app.use(express.static('public'))
 
+// let data = require('./controllers/getData')
+const regController = require('./controllers/User');
+const loginController = require('./controllers/login');
+const dashboardController = require('./controllers/Dashboard');
 
 app.get('/', (req, res) => {
   res.render('index')
 })
 
 // app.get('/register', regController.getData)
-app.get('/register', userController.getData)
-app.post('/register', userController.register)
-app.get('/login', userController.login)
-app.post('/login', userController.postLogin)
-app.get('/Dashboard', authUser ,userController.dashboard)
-app.get("/logout",userController.logout)
+app.get('/register', regController.getData)
+app.post('/register', regController.register)
+app.get('/login', loginController.login)
+app.post('/login', loginController.postLogin)
+app.get('/Dashboard', dashboardController.dashboard)
+app.get("/logout",loginController.logout)
+
 
 
 app.listen(3000, () => {
