@@ -1,4 +1,4 @@
-# Curruption  Reduction System using Blockchain Technology
+# Corruption  Reduction System using Blockchain Technology
 
 Curruption  Reduction System using Blockchain Technology is a webportal that allow government to manage the project activities and tracking the progress of the projects. 
 System is based on the Blockchain technology. it deployed on etherium blochain network 
