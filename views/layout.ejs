@@ -20,16 +20,23 @@
                 <ul class="flex items-right">
                     <li class="ml-6 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent ..."><a href="/">Home</a></li>
                     <li class="ml-6"><a href="/">About us</a></li>
+                    
                     <li class="ml-6"><a href="/contact">Contact us</a></li>
 
                     <li class="ml-6"><a href="/register">Register</a></li>
                     <li class="ml-6"><a href="/login">Login</a></li>
 
+                    <!--li class="ml-6"><a href="/">Contact us</a></li-->
+                <% if(!currentUser) { %>
+                    <li class="ml-6"><a href="register">Register</a></li>
+                    <li class="ml-6"><a href="login">Login</a></li>
+                <% } else { %>
+                
                     <li class="ml-6 rounded-full border px-2 bg-grey-700">
-                        <span class="m-2 text-red-500"></span>
-                        <a href="">Logout</a>
+                        <span class="m-2 text-red-500"><%= currentUser %></span>
+                        <a href="logout">Logout</a>
                     </li>
-
+                <% } %>
                 </ul>
             </div>
         </nav>

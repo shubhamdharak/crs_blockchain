@@ -2,10 +2,10 @@ const myScheme = require('../models/scheme')
 const bcrypt = require('bcrypt')
 
 module.exports = {
-    getData:  (req, res) => {
+    getData: (req, res) => {
         res.render('register')
     },
-    register:  async (req, res) => {
+    register: async (req, res) => {
         name = req.body.name
         email = req.body.email
         password1 = req.body.password1
@@ -14,9 +14,9 @@ module.exports = {
         accountType = req.body.accountType
         age = req.body.age
         if (password1 === password2 && password1 != "") {
-            const emailId = await myScheme.findOne({email:email})
-            if(emailId) {
-                req.flash('error',"Email already exists, try again")
+            const emailId = await myScheme.findOne({ email: email })
+            if (emailId) {
+                req.flash('error', "Email already exists, try again")
                 return res.redirect('register')
             }
             bcrypt.hash(password1, 10, (err, hash) => {
@@ -32,7 +32,7 @@ module.exports = {
                     user.save()
                     req.flash('success', "You have successfully registered!")
                     return res.redirect('login')
-                    
+
                 }
                 else {
                     req.flash('error', "Something went wrong!, try again")
@@ -46,31 +46,4 @@ module.exports = {
         }
         //res.render('register')
     },
-    login: (req, res)=> {
-        res.render('login')
-    },
-    postLogin: async (req, res)=> {
-        const email = req.body.email
-        const user = await myScheme.findOne({email:email})
-        if(user) {
-            //bcrypt.hash(req.body.password,10,(err,hash)=>{console.log(hash)})
-            bcrypt.compare(req.body.password, user.password, (err, result)=> {
-                if(result){
-                   req.session.isValidUser = true
-                   return res.render('index', {"name": user.name})
-                }
-                else{
-                    req.flash('error', "Password not match")
-                    return res.render('login')
-                }
-            })
-            //return res.redirect('login')
-        }
-        else {
-            req.flash('error', "User not found")
-            return res.redirect('login')
-        }
-        //res.render("login")
-    }
 }
-
