@@ -51,6 +51,8 @@ app.get('/register', regController.getData)
 app.post('/register', regController.register)
 app.get('/login', regController.login)
 app.post('/login', regController.postLogin)
+app.get('/Dashboard', regController.dashboard)
+app.get("/logout",regController.logout)
 
 
 app.listen(3000, () => {
