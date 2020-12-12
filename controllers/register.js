@@ -57,7 +57,9 @@ module.exports = {
             bcrypt.compare(req.body.password, user.password, (err, result)=> {
                 if(result){
                    req.session.isValidUser = true
-                   return res.render('index', {"name": user.name})
+                   req.session.userId = user.id;
+                   req.flash('success', "Welcome, "+user.name)
+                   return res.redirect('Dashboard')
                 }
                 else{
                     req.flash('error', "Password not match")
@@ -71,6 +73,19 @@ module.exports = {
             return res.redirect('login')
         }
         //res.render("login")
-    }
+    },
+    dashboard: (req, res)=> {
+        usr = req.session.isValidUser
+        if(usr)
+            res.render('Dashboard',{isValid:usr})
+        else{
+            req.flash('error', "Session Expired")
+            res.redirect("login")
+        }
+    },
+    logout:(req,res)=>{
+        req.session.isValidUser = false
+        res.redirect("/")
+    },
 }
 
