@@ -1,6 +1,6 @@
 
 body,html {
-    font-family: 'Lato', sans-serif;
+    font-family: 'Spectral';
     -webkit-font-smoothing: antialiased;
     background-color: #F8F8F8;
     /* $primary: #FE5F1E;
@@ -12,20 +12,35 @@ body,html {
 }
 
 .header {
-    background-color: #fff;
+    background-color: #ffae00;
 }
 
 li > a:hover {
     color: #b23301;
 }
 
-footer {
-    background-color: #FE5F1E;
-    color : white;
+footer{
     position: fixed;
+    bottom:0;
     width: 100%;
-    display: flex;
-    justify-content: center;
-    bottom:0
 }
 
+.orange {
+    background-color: #FE5F1E;
+    width: 100%;
+    justify-content: center;
+    height: 10px;
+}
+.green {
+    background-color: #06ff2f;
+    width: 100%;
+    justify-content: center;
+    height:10px;
+}
+.white{
+        background-color: white;
+        width: 100%;
+        justify-content: center;
+        height: 5px;
+
+}

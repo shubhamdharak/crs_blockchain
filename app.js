@@ -52,6 +52,9 @@ app.post('/register', regController.register)
 app.get('/login', regController.login)
 app.post('/login', regController.postLogin)
 
+app.get("/contact",(req,res)=>{
+  res.render("contact");
+})
 
 app.listen(3000, () => {
   console.log("Listening");
