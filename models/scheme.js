@@ -7,7 +7,8 @@ let register = new mongoose.Schema({
     email: {type: String},
     mobile: {type: Number},
     accountType: {type: String},
-    age: {type: Number}
+    age: {type: Number},
+    accVerified:{type:Boolean}
 },{timestamps:true})
 
 myScheme = mongoose.model('registration', register);

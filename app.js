@@ -7,8 +7,8 @@ const session = require('express-session');
 const flash = require('express-flash')
 const userController = require('./controllers/User')
 const authUser = require('./controllers/authUser')
+const mail = require('./controllers/mail')
 const app = express()
-
 
 app.use(cookieParser());
 app.use(session({
@@ -36,6 +36,7 @@ app.use(express.static('public'))
 const regController = require('./controllers/User');
 const loginController = require('./controllers/login');
 const dashboardController = require('./controllers/Dashboard');
+const verifyEmail = require("./controllers/verifyUser");
 
 app.get('/', (req, res) => {
   res.render('index')
@@ -48,6 +49,7 @@ app.get('/login', loginController.login)
 app.post('/login', loginController.postLogin)
 app.get('/Dashboard', dashboardController.dashboard)
 app.get("/logout",loginController.logout)
+app.get("/VerifyMail",verifyEmail.verify)
 
 
 app.get("/contact",(req,res)=>{
