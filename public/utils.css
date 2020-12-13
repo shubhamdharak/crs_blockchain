@@ -29,13 +29,13 @@ footer{
     background-color: #FE5F1E;
     width: 100%;
     justify-content: center;
-    height: 10px;
+    height: 22px;
 }
 .green {
     background-color: #06ff2f;
     width: 100%;
     justify-content: center;
-    height:10px;
+    height:5px;
 }
 .white{
         background-color: white;
@@ -43,4 +43,8 @@ footer{
         justify-content: center;
         height: 5px;
 
+}
+.ftext{
+    text-shadow: 2px 2px 4px rgb(95, 150, 253);
+    color:white;
 }

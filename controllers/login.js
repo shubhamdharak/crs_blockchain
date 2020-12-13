@@ -15,6 +15,8 @@ module.exports = {
                    req.session.isValidUser = true
                    req.session.userId = user.id;
                    req.session.userRole = user.accountType;
+                   res.cookie('isValidUser', true)
+                   res.cookie('user_name', user.name)
                    req.flash('success', "Welcome, "+user.name)
                    return res.redirect('Dashboard')
                 }
@@ -33,6 +35,7 @@ module.exports = {
     },
     logout:(req,res)=>{
         req.session.isValidUser = false
+        res.cookie('isValidUser', false)
         res.redirect("/")
     },
    
