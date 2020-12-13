@@ -5,7 +5,7 @@ module.exports ={
             res.render('Dashboard',{isValid:usr})
         else{
             req.flash('error', "Session Expired")
-            res.redirect("login")
+            res.redirect("logout")
         }
     },
 }

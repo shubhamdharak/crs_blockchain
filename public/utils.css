@@ -9,6 +9,7 @@ body,html {
     $pure: #fff;
     $dark: #232323;
     $gray: #ccc; */
+    prefers-color-scheme: dark
 }
 
 .header {
