@@ -1,15 +1,18 @@
 <%if (messages.success) { %>
-    <script>toastAlert("Error", "<%= messages.success %>", "success-danger");</script>
+    <script>toastAlert("Success", "<%= messages.success %>", "alert-success");</script>
 <% } %>
 <%if (messages.error) { %>
     <script>toastAlert("Error", "<%= messages.error %>", "alert-danger");</script>
+<% } %>
+<%if (messages.warning) { %>
+    <script>toastAlert("Warning", "<%= messages.warning %>", "alert-secondary");</script>
 <% } %>
 <center>
     <div class="w-400 mw-full">
         <div class="card p-0 shadow-lg">
             <!-- Card header -->
             <div class="px-card py-10 border-bottom">
-                <h2 class="card-title font-size-24 font-weight-bold m-0 text-center" style="color:rgb(155, 18, 36);">
+                <h2 class="card-title font-size-24 font-weight-bold m-0 text-center text-smoothing-antialiased-lm" style="color:rgb(250, 142, 0);">
                     Login
                 </h2>
             </div>

@@ -1,5 +1,6 @@
 const myScheme = require('../models/scheme')
 const bcrypt = require('bcrypt')
+const mail = require('../controllers/mail')
 
 module.exports = {
     getData: (req, res) => {
@@ -27,10 +28,18 @@ module.exports = {
                         email: email,
                         mobile: mobile,
                         accountType: accountType,
-                        age: age
+                        age: age,
+                        accVerified : false
                     })
-                    user.save()
-                    req.flash('success', "You have successfully registered!")
+                    user.save().then(function(ress,er){
+                        url = req.protocol + '://' + req.get('host')+"/VerifyMail?tokens="+ress.id;
+                        mail.send(email,"Account Verification - [CRS-BT]","<html><body><h3>Please Verify your Account</h3><a href='"+url+"'>"+url+"</a></body></html>")
+
+                    })
+                    
+                    
+                    req.flash('success', "You have successfully registered..!")
+                    req.flash('warning','Please Verify your Email Address')
                     return res.redirect('login')
 
                 }
