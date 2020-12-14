@@ -42,10 +42,11 @@ module.exports = {
                             req.flash('infos',`We Have Send Verification Email to : ${ress.email}`)
                             return res.redirect('login')
                         }})
-                        .catch(function(){
+                        .catch(function(err){
                             const myquery = { "_id": ress.id};
                             user.remove(myquery)
                             req.flash("error","E-mail Sending Failed...please Re-Register")
+                            console.log(err);
                             res.redirect("register")
                         })
                     })
