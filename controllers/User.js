@@ -31,16 +31,24 @@ module.exports = {
                         age: age,
                         accVerified : false
                     })
-                    user.save().then(function(ress,er){
+                    user.save().then(async function(ress,er){
                         url = req.protocol + '://' + req.get('host')+"/VerifyMail?tokens="+ress.id;
-                        mail.send(email,"Account Verification - [CRS-BT]","<html><body><h3>Please Verify your Account</h3><a href='"+url+"'>"+url+"</a></body></html>")
-
+                        curl = req.protocol + '://' + req.get('host')+"/contact"
+                        temp = require('../controllers/cnf_mail_template')
+                        await mail.send(email,"Account Verification - [CRS-BT]",temp.getTemplate(name,url,curl))
+                        .then(function(msg){if(msg){
+                            req.flash('success', "You have successfully registered..!")
+                            req.flash('warning','Please Verify your Email Address')
+                            req.flash('infos',`We Have Send Verification Email to : ${ress.email}`)
+                            return res.redirect('login')
+                        }})
+                        .catch(function(){
+                            const myquery = { "_id": ress.id};
+                            user.remove(myquery)
+                            req.flash("error","E-mail Sending Failed...please Re-Register")
+                            res.redirect("register")
+                        })
                     })
-                    
-                    
-                    req.flash('success', "You have successfully registered..!")
-                    req.flash('warning','Please Verify your Email Address')
-                    return res.redirect('login')
 
                 }
                 else {

@@ -7,6 +7,9 @@
 <%if (messages.warning) { %>
     <script>toastAlert("Warning", "<%= messages.warning %>", "alert-secondary");</script>
 <% } %>
+<%if (messages.infos) { %>
+    <script>toastAlert("Information", "<%= messages.infos %>", "alert-primary");</script>
+<% } %>
 <center>
     <div class="w-400 mw-full">
         <div class="card p-0 shadow-lg">
