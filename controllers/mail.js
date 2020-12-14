@@ -17,12 +17,8 @@ module.exports = {
             subject: subj,
             html: msg
           };
-          transporter.sendMail(mailOptions, function(error, info){
-            if (error) {
-              return false;
-            } else {
-              return true;
-            }
-          });
+          let res = null
+          res = transporter.sendMail(mailOptions)
+          return res
     }
 }
