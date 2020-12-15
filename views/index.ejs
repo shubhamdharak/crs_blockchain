@@ -1,1 +1,161 @@
-Hello
+<!-- slider -->
+<Section class="img-slider" style="width:100%">
+    <div class="slider-container">
+
+        <div class="slide">
+            <img src="https://i.dawn.com/2011/08/anna-hazare-protest-543.jpg">
+        </div>
+
+        <div class="slide">
+            <img src="https://thumbs.dreamstime.com/b/anti-bribery-corruption-concepts-businessman-refusing-rejecting-money-to-take-bribe-partner-anti-bribery-150081139.jpg">
+        </div>
+
+        <div class="slide">
+            <img src="https://thebetterindia-english.s3.ap-south-1.amazonaws.com/uploads/2018/10/IAC-34567890.jpg">
+        </div>
+
+    </div>
+</Section>
+
+<!-- Content wrapper start -->
+<div>
+    <div class="container-fluid">
+        <div class="row row-eq-spacing-lg">
+            <div class="col-lg-9">
+                
+
+                <!-- Page Content -->
+
+                <div class="card">
+                    <h2 class="card-title">
+                        Card title
+                    </h2>
+                    <div class="fake-content"></div>
+                    <div class="fake-content"></div>
+                    <div class="fake-content"></div>
+
+                    <button class="btn btn-primary btn-sm" type="button" onclick="toastAlert()">Toast!</button>
+
+                </div>
+                <div class="card">
+                    <h2 class="card-title">
+                        Card title
+                    </h2>
+                    <div class="fake-content"></div>
+                    <div class="fake-content"></div>
+                    <div class="fake-content"></div>
+
+                    <button class="btn btn-primary btn-sm" type="button" onclick="toastAlert()">Toast!</button>
+
+                </div>
+                <div class="card">
+                    <h2 class="card-title">
+                        Card title
+                    </h2>
+                    <div class="fake-content"></div>
+                    <div class="fake-content"></div>
+                    <div class="fake-content"></div>
+
+                    <button class="btn btn-primary btn-sm" type="button" onclick="toastAlert()">Toast!</button>
+
+                </div>
+                <div class="card">
+                    <h2 class="card-title">
+                        Card title
+                    </h2>
+                    <div class="fake-content"></div>
+                    <div class="fake-content"></div>
+                    <div class="fake-content"></div>
+
+                    <button class="btn btn-primary btn-sm" type="button" onclick="toastAlert()">Toast!</button>
+
+                </div><div class="card">
+                    <h2 class="card-title">
+                        Card title
+                    </h2>
+                    <div class="fake-content"></div>
+                    <div class="fake-content"></div>
+                    <div class="fake-content"></div>
+
+                    <button class="btn btn-primary btn-sm" type="button" onclick="toastAlert()">Toast!</button>
+
+                </div><div class="card">
+                    <h2 class="card-title">
+                        Card title
+                    </h2>
+                    <div class="fake-content"></div>
+                    <div class="fake-content"></div>
+                    <div class="fake-content"></div>
+
+                    <button class="btn btn-primary btn-sm" type="button" onclick="toastAlert()">Toast!</button>
+
+                </div><div class="card">
+                    <h2 class="card-title">
+                        Card title
+                    </h2>
+                    <div class="fake-content"></div>
+                    <div class="fake-content"></div>
+                    <div class="fake-content"></div>
+
+                    <button class="btn btn-primary btn-sm" type="button" onclick="toastAlert()">Toast!</button>
+
+                </div>
+               
+                <div class="content">
+                    <div class="fake-content"></div>
+                    <div class="fake-content w-150"></div>
+                </div>
+            </div>
+
+            <!-- Notification Window -->
+            <div class="col-lg-3 right-0" style="margin-top:0px ;">
+                <div class="card content notification_window" >
+                    <h2 class="content-title font-size-20">
+                        Notifications
+                    </h2>
+                    <div class="marquee" data-duplicated='true' data-direction='up' >
+                        <!-- direction="up" behavior="sliding"  scrollamount="5" onmouseover="this.stop();" onmouseout="this.start();" -->
+                        <a href="#">Notification 1</a><br>
+                        <a href="#">Notification 1</a><br>
+                        <a href="#">Notification 1</a><br>
+                        <a href="#">Notification 1</a><br>
+                        <a href="#">Notification 1</a><br>
+                        <a href="#">Notification 1</a><br>
+                        <a href="#">Notification 1</a><br>
+                        <a href="#">Notification 1</a><br>
+                        <a href="#">Notification 1</a><br>
+                        <a href="#">Notification 1</a><br>
+                    </div>
+                </div>
+                <div class="alert filled-lm" id="qt" style="position: sticky;position: -webkit-sticky;top: 435px;" role="alert">
+                    <button class="close" data-dismiss="alert" type="button" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="alert-heading">Quote of the Day</h4>
+                    <b id="qot"></b>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+<!-- Content wrapper end -->
+
+<script>
+    classes = Array("alert-primary","alert-success","alert-secondary","alert-danger")
+    qts = Array("Power doesn’t corrupt people, people corrupt power.",
+                "The worst disease in the world today is corruption. And there is a cure: transparency.",
+                "Power does not corrupt. Fear corrupts, perhaps the fear of a loss of power.",
+                "Corruption is like a ball of snow, once it’s set a rolling it must increase.",
+                "The more corrupt the state, the more laws.",
+                "Your ignorance on corruption is their power.",
+                "Nearly all men can stand adversity, but if you want too test a man’s character, give him power",
+                "A politician thinks of the next election; a statesman thinks of the next generation.",
+                "Power tends to corrupt, and absolute power corrupts absolutely.",
+                "One does not fight corruption by fighting corruption.",);
+
+    const cls = classes[Math.floor(Math.random() * classes.length)];
+    const qt = qts[Math.floor(Math.random() * qts.length)]
+    $("#qt").addClass(cls)
+    $("#qot").text(qt);
+</script>
