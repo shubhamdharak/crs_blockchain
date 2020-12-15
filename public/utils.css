@@ -49,3 +49,15 @@ footer{
     text-shadow: 2px 2px 4px rgb(95, 150, 253);
     color:white;
 }
+
+.notification_window{
+    position: -webkit-sticky;
+    position: sticky;
+    top:0;
+    font-size: 20px;
+}
+
+.marquee {
+    width: 300px;
+    overflow: hidden;
+  }
