@@ -1,0 +1,61 @@
+
+<%if (messages.success) { %>
+	<div class="flex justify-end"><h1 class="bg-green-500 text-center rounded text-white text-lg mx-5 px-2 mt-5"><%= messages.success %></h1></div>
+	<% } %>
+	<%if (messages.error) { %>
+	<div class="flex justify-end"><h1 class="bg-red-500 text-center rounded text-white text-lg mx-5 px-2 mt-5"><%= messages.error %></h1></div>
+	<% } %>
+	
+	<div class="w-full max-w-lg  m-auto">
+	
+		<h1 class="text-bold text-4xl text-center underline text-green-600 mt-5 ">Contact Us</h1>
+		<form method="POST" action="/contact" class="bg-white shadow-md rounded px-8 pt-6 pb-5 mt-5 mb-5">
+			<div class="mb-4">
+				<label class="block text-gray-700 text-sm font-bold mb-2" for="full_name">
+					Full Name
+				</label>
+				<input
+					class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+					id="full_name" name="name" type="text" placeholder="Joe Doe">
+			</div>
+			<div class="mb-4">
+				<label class="block text-gray-700 text-sm font-bold mb-2" for="email">
+					Email
+				</label>
+				<input
+					class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+					id="email" name="email" type="text" placeholder="sample@sample.com">
+			</div>
+			<div class="mb-4">
+				<label class="block text-gray-700 text-sm font-bold mb-2" for="mobile">
+					Mobile Number
+				</label>
+				<input
+					class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+					id="mobile" name="mobile" type="tel" placeholder="1234567890">
+			</div>
+			<div class="mb-4">
+				<label class="block text-gray-700 text-sm font-bold mb-2" for="full_name">
+					Query
+				</label>
+				<input
+					class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+					id="full_name" name="name" type="text" placeholder="Enter Query">
+			</div>
+				<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+					<svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+						<path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
+				</div>
+			</div>
+			<div class="flex items-center justify-between">
+				<button
+					class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+					type="submit">
+					Submit
+				</button>
+			</div>
+			
+		</form>
+	</div>
+	
+	

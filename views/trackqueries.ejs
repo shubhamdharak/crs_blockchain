@@ -1,0 +1,35 @@
+<%if (messages.success) { %>
+    <script>toastAlert("Success", "<%= messages.success %>", "alert-success");</script>
+<% } %>
+<%if (messages.error) { %>
+    <script>toastAlert("Error", "<%= messages.error %>", "alert-danger");</script>
+<% } %>
+<%if (messages.warning) { %>
+    <script>toastAlert("Warning", "<%= messages.warning %>", "alert-secondary");</script>
+<% } %>
+<%if (messages.infos) { %>
+    <script>toastAlert("Information", "<%= messages.infos %>", "alert-primary");</script>
+<% } %>
+<center>
+    <div class="w-550 mw-full">
+        <div class="card p-0 shadow-lg">
+            <!-- Card header -->
+            <div class="px-card py-10 border-bottom">
+                <h2 class="card-title font-size-24 font-weight-bold m-0 text-center text-smoothing-antialiased-lm" style="color:rgb(253, 1, 35);">
+                    Query Status - [ <%= qry.querySts %> ]
+                </h2>
+            </div>
+            <!-- Content -->
+            <div class="content">
+                <b style="color:orangered;">Tokens : <%= qry.id %></b><br>
+
+                <label for="qry" style="position: absolute;left: 15px;">Query:</label><br>
+                <textarea class="form-control" id="qry" disabled="disabled">User : <%= qry.name %>&#10;<%= qry.query %></textarea>
+                <br>
+                <label for="sol" style="position: absolute;left: 15px;">Solution:</label><br>
+                <textarea class="form-control" id="sol" disabled="disabled"><%= qry.querySolution %></textarea>
+            </div> 
+        </div>
+    </div>
+</center>
+<br><br>

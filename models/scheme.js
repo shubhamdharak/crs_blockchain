@@ -11,5 +11,16 @@ let register = new mongoose.Schema({
     accVerified:{type:Boolean}
 },{timestamps:true})
 
-myScheme = mongoose.model('registration', register);
-module.exports = myScheme
+let contactQueries = new mongoose.Schema({
+    name:{type:String},
+    email:{type:String},
+    mobile:{type:Number},
+    query:{type:String},
+    isUser:{type:String},
+    querySts:{type:String},
+    querySolution:{type:String}
+},{timestamps:true})
+
+regSchema = mongoose.model('registration', register);
+contactSchema = mongoose.model('contactQueries',contactQueries);
+module.exports = {regSchema,contactSchema}

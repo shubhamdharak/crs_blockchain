@@ -1,13 +1,26 @@
+<%if (messages.success) { %>
+    <script>toastAlert("Success", "<%= messages.success %>", "alert-success");</script>
+<% } %>
+<%if (messages.error) { %>
+    <script>toastAlert("Error", "<%= messages.error %>", "alert-danger");</script>
+<% } %>
+<%if (messages.warning) { %>
+    <script>toastAlert("Warning", "<%= messages.warning %>", "alert-secondary");</script>
+<% } %>
+<%if (messages.infos) { %>
+    <script>toastAlert("Information", "<%= messages.infos %>", "alert-primary");</script>
+<% } %>
 <!-- slider -->
 <Section class="img-slider" style="width:100%">
     <div class="slider-container">
 
         <div class="slide">
-            <img src="https://i.dawn.com/2011/08/anna-hazare-protest-543.jpg">
+            <img src="img1.jpg">
         </div>
 
         <div class="slide">
-            <img src="https://thumbs.dreamstime.com/b/anti-bribery-corruption-concepts-businessman-refusing-rejecting-money-to-take-bribe-partner-anti-bribery-150081139.jpg">
+            <img
+                src="https://thumbs.dreamstime.com/b/anti-bribery-corruption-concepts-businessman-refusing-rejecting-money-to-take-bribe-partner-anti-bribery-150081139.jpg">
         </div>
 
         <div class="slide">
@@ -22,7 +35,7 @@
     <div class="container-fluid">
         <div class="row row-eq-spacing-lg">
             <div class="col-lg-9">
-                
+
 
                 <!-- Page Content -->
 
@@ -69,27 +82,8 @@
 
                     <button class="btn btn-primary btn-sm" type="button" onclick="toastAlert()">Toast!</button>
 
-                </div><div class="card">
-                    <h2 class="card-title">
-                        Card title
-                    </h2>
-                    <div class="fake-content"></div>
-                    <div class="fake-content"></div>
-                    <div class="fake-content"></div>
-
-                    <button class="btn btn-primary btn-sm" type="button" onclick="toastAlert()">Toast!</button>
-
-                </div><div class="card">
-                    <h2 class="card-title">
-                        Card title
-                    </h2>
-                    <div class="fake-content"></div>
-                    <div class="fake-content"></div>
-                    <div class="fake-content"></div>
-
-                    <button class="btn btn-primary btn-sm" type="button" onclick="toastAlert()">Toast!</button>
-
-                </div><div class="card">
+                </div>
+                <div class="card">
                     <h2 class="card-title">
                         Card title
                     </h2>
@@ -100,7 +94,29 @@
                     <button class="btn btn-primary btn-sm" type="button" onclick="toastAlert()">Toast!</button>
 
                 </div>
-               
+                <div class="card">
+                    <h2 class="card-title">
+                        Card title
+                    </h2>
+                    <div class="fake-content"></div>
+                    <div class="fake-content"></div>
+                    <div class="fake-content"></div>
+
+                    <button class="btn btn-primary btn-sm" type="button" onclick="toastAlert()">Toast!</button>
+
+                </div>
+                <div class="card">
+                    <h2 class="card-title">
+                        Card title
+                    </h2>
+                    <div class="fake-content"></div>
+                    <div class="fake-content"></div>
+                    <div class="fake-content"></div>
+
+                    <button class="btn btn-primary btn-sm" type="button" onclick="toastAlert()">Toast!</button>
+
+                </div>
+
                 <div class="content">
                     <div class="fake-content"></div>
                     <div class="fake-content w-150"></div>
@@ -108,14 +124,15 @@
             </div>
 
             <!-- Notification Window -->
-            <div class="col-lg-3 right-0" style="margin-top:0px ;">
-                <div class="card content notification_window" >
+            <div class="col-lg-3 right-0" style="margin-top:0px;">
+                <div class="card content notification_window" style="overflow: hidden">
                     <h2 class="content-title font-size-20">
                         Notifications
                     </h2>
-                    <div class="marquee" data-duplicated='true' data-direction='up' >
+                    <div class="marquee" data-duplicated='true' data-direction='up'
+                        style="width:220px;overflow-wrap: break-word;">
                         <!-- direction="up" behavior="sliding"  scrollamount="5" onmouseover="this.stop();" onmouseout="this.start();" -->
-                        <a href="#">Notification 1</a><br>
+                        <a href="#">Notification 1 zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz</a><br>
                         <a href="#">Notification 1</a><br>
                         <a href="#">Notification 1</a><br>
                         <a href="#">Notification 1</a><br>
@@ -127,7 +144,7 @@
                         <a href="#">Notification 1</a><br>
                     </div>
                 </div>
-                <div class="alert filled-lm" id="qt" style="position: sticky;position: -webkit-sticky;top: 435px;" role="alert">
+                <div class="alert filled-lm" id="qt" role="alert">
                     <button class="close" data-dismiss="alert" type="button" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -135,27 +152,55 @@
                     <b id="qot"></b>
                 </div>
             </div>
-            
+
         </div>
     </div>
 </div>
 <!-- Content wrapper end -->
 
+<!-- Static bottom navbar -->
+<nav class="navbar navbar-static-bottom">
+    <ul class="navbar-nav ml-auto">
+        <!-- ml-auto = margin-left: auto -->
+        <li class="nav-item">
+            <a href="about" class="nav-link">About us</a>
+        </li>
+        <li class="nav-item">
+            <a href="contact" class="nav-link">Contact us</a>
+        </li>
+    </ul>
+    <!-- Navbar text -->
+    <span class="navbar-text">
+        CRS-BT &copy;
+        <script>let y = new Date(); document.write(y.getFullYear())</script> Made with <i
+            class="fa fa-heart ml-5 mr-5"></i> By Amdar
+        Boys
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item ">
+                <a href="#top" class="btn btn-square btn-primary rounded-circle" data-toggle="tooltip"
+                    data-title="Scroll to Top" data-placement="top"
+                    style="margin-left: 20px;margin-top: 10px;margin-right: 30px;" role="button">
+                    <i class="fa fa-sort-asc"></i>
+                </a>
+            </li>
+        </ul>
+    </span>
+</nav>
+
 <script>
-    classes = Array("alert-primary","alert-success","alert-secondary","alert-danger")
+    classes = Array("alert", "alert-primary", "alert-success", "alert-secondary", "alert-danger")
     qts = Array("Power doesn’t corrupt people, people corrupt power.",
-                "The worst disease in the world today is corruption. And there is a cure: transparency.",
-                "Power does not corrupt. Fear corrupts, perhaps the fear of a loss of power.",
-                "Corruption is like a ball of snow, once it’s set a rolling it must increase.",
-                "The more corrupt the state, the more laws.",
-                "Your ignorance on corruption is their power.",
-                "Nearly all men can stand adversity, but if you want too test a man’s character, give him power",
-                "A politician thinks of the next election; a statesman thinks of the next generation.",
-                "Power tends to corrupt, and absolute power corrupts absolutely.",
-                "One does not fight corruption by fighting corruption.",);
+        "The more corrupt the state, the more laws.",
+        "Your ignorance on corruption is their power.",
+        "Power tends to corrupt, and absolute power corrupts absolutely.",
+        "One does not fight corruption by fighting corruption.",
+        "Fighting corruption is not just good governance. It's self-defense. It's patriotism.");
 
     const cls = classes[Math.floor(Math.random() * classes.length)];
     const qt = qts[Math.floor(Math.random() * qts.length)]
     $("#qt").addClass(cls)
     $("#qot").text(qt);
+    $("document").ready(function () {
+        $("#ftr").hide()
+    })
 </script>
