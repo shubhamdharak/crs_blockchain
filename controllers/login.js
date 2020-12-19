@@ -43,8 +43,10 @@ module.exports = {
         req.session.isValidUser = false
         req.session.userId = false;
         req.session.userRole = false;
-        res.cookie('isValidUser', false)
-        res.redirect("/")
+        req.session.destroy(function(ree){
+            res.cookie('isValidUser', false)
+            res.redirect("/")
+        })
     },
    
 }
