@@ -1,8 +1,12 @@
 module.exports ={
     dashboard: (req, res)=> {
-        usr = req.session.isValidUser
-        if(usr)
-            res.render('Dashboard',{isValid:usr})
+        if(req.session.isValidUser)
+            if(req.session.userRole === "goverment"){
+                res.render("govDashboard",{isValid:true,userRole:req.session.userRole})
+            }
+            else if(req.session.userRole === "vendor"){
+                res.render("userDashboard",{isValid:true,userRole:req.session.userRole})
+            }
         else{
             req.flash('error', "Session Expired")
             res.redirect("logout")

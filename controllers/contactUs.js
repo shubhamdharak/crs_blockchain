@@ -1,6 +1,6 @@
 let contactQueries = require('../models/scheme').contactSchema;
 var fs = require('fs');
-const mail = require('../controllers/mail')
+const mail = require('./mail')
 
 module.exports = {
     getPage:(req,res)=>{

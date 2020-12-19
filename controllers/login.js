@@ -41,6 +41,8 @@ module.exports = {
     },
     logout:(req,res)=>{
         req.session.isValidUser = false
+        req.session.userId = false;
+        req.session.userRole = false;
         res.cookie('isValidUser', false)
         res.redirect("/")
     },
