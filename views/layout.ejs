@@ -20,7 +20,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="#000000">
 
     <!-- Fav and Title -->
-    <title>CRS-BT</title>
+    <title>Corruption Reduction System</title>
 
     <!-- Halfmoon -->
     <link href="https://cdn.jsdelivr.net/npm/halfmoon@1.1.1/css/halfmoon.min.css" rel="stylesheet" />
@@ -32,23 +32,26 @@
 
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery.Marquee/1.5.0/jquery.marquee.js" integrity="sha512-W0prY9paOaxiifvCq5LwDZujULfPd95HK2hR2JMWyiOQB2j4Dq7e8ShmXhDPw6tKyQDa4ryWJs0eBz0mHclKrQ==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery.Marquee/1.5.0/jquery.marquee.js"
+        integrity="sha512-W0prY9paOaxiifvCq5LwDZujULfPd95HK2hR2JMWyiOQB2j4Dq7e8ShmXhDPw6tKyQDa4ryWJs0eBz0mHclKrQ=="
+        crossorigin="anonymous"></script>
 
     <link rel="stylesheet" href="slider.css">
     <link rel="stylesheet" href="utils.css">
 </head>
 
-<body class="page-wrapper with-custom-webkit-scrollbars with-custom-css-scrollbars" data-dm-shortcut-enabled="true"
+<body class="with-custom-webkit-scrollbars with-custom-css-scrollbars" data-dm-shortcut-enabled="true"
     data-sidebar-shortcut-enabled="true">
 
     <!-- Page wrapper start -->
-    <div id="page-wrapper" class="content-wrapper with-navbar" data-sidebar-type="default">
+    <div id="sidebar" class="page-wrapper  with-navbar" data-sidebar-type="default">
 
         <!-- Sticky alerts -->
         <div class="sticky-alerts" style="margin-top: 50px;"></div>
 
         <!-- Navbar start -->
-        <nav class="navbar">
+        <nav class="navbar" id="top">
+            <!-- Logo -->
             <a href="/" class="navbar-brand">
                 <img src="logo.png" alt="CRS" style="height: 50px;width: 50px;">
                 <!--span class="d-none d-sm-flex" style="text-shadow: 1px 1px 4px #000000;font-family: fantasy;">
@@ -78,17 +81,17 @@
                 <li class="nav-item" id="validUser">
                     <a href="logout" class="badge-group" role="group" style="margin-top: 12px;">
                         <span class="badge" id=username style=" padding: 5px"></span>
+                        <span class="badge badge-danger" id="userRole" style=" padding: 5px"></span>
                         <span class="badge badge-primary" style=" padding: 5px;">Logout</span>
                     </a>
                 </li>
             </ul>
 
-            <!-- Dark/Light Toggle -->
+            <!-- Dark/Light Toggle Button-->
             <div class="navbar-content ml-auto">
-                <button class="btn btn-action mr-5" type="button" onclick="changeMode()">
+                <button class="btn btn-action mr-5 rounded-circle" type="button" onclick="changeMode()">
                     <i class="fa fa-moon-o" aria-hidden="true"></i>
                 </button>
-                <!--a href="#" class="btn btn-primary" role="button">Get started</a-->
             </div>
         </nav>
         <!-- Navbar end -->
@@ -110,15 +113,17 @@
 
             }
         </script>
-
+        <div class="content-wrapper">
         <%- body %>
+        </div>
 
             <!-- Navbar fixed bottom start -->
-            <footer>
+            <footer id="ftr">
                 <div class="orange">
                     <center class="ftext">
                         CRS-BT &copy;
-                        <script>let y = new Date(); document.write(y.getFullYear())</script> Made with <i class="fa fa-heart ml-5 mr-5"></i> By Amdar
+                        <script>let y = new Date(); document.write(y.getFullYear())</script> Made with <i
+                            class="fa fa-heart ml-5 mr-5"></i> By Amdar
                         Boys
                     </center>
                 </div>
@@ -129,13 +134,12 @@
 
     </div>
     <!-- Page wrapper end -->
-
-
 </body>
 
 </html>
 
 <script>
+    // Return Cookies value by Name
     function getCookie(cname) {
         var name = cname + "=";
         var ca = document.cookie.split(';');
@@ -151,6 +155,7 @@
         return false;
     }
 
+    // Login/Register/Logout options enable/disable Script
     if (getCookie("isValidUser") == "true") {
         $("#log").hide()
         $("#reg").hide()
@@ -164,27 +169,35 @@
         $("#reg").show()
     }
 
-    if (getCookie("darkmode") == "true"){
+    //Script to set Set user prefered Dark/light mode to every page
+    if (getCookie("darkmode") == "true") {
         $("body").addClass("dark-mode")
     }
-    else{
+    else {
         document.cookie = "darkmode=false"
     }
 
-    function changeMode(){
+    // Script to toggle Dark mode and add current mode to cookie
+    function changeMode() {
         halfmoon.toggleDarkMode()
-        if(getCookie("darkmode")=="true"){
+        if (getCookie("darkmode") == "true") {
             document.cookie = "darkmode=false"
         }
-        else if(getCookie("darkmode")=="false"){
+        else if (getCookie("darkmode") == "false") {
             document.cookie = "darkmode=true"
         }
     }
-    console.log(getCookie("darkmode"))
+    console.log("Dark Mode Enabled - " + getCookie("darkmode"))
 
+    // Script to Slide Notification Window
     $('.marquee').marquee({
         direction: 'up',
-        pauseOnHover:true,
+        pauseOnHover: true,
 
     });
+
+    // Script to Disable Horizontal Scroll
+    window.onscroll = function () {
+        window.scrollLeft = 0;
+    }
 </script>

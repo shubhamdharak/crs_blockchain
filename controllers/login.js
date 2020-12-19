@@ -1,4 +1,4 @@
-const myScheme = require('../models/scheme');
+const regSchema = require('../models/scheme').regSchema;
 const bcrypt = require('bcrypt');
 
 module.exports = {
@@ -7,7 +7,7 @@ module.exports = {
     },
     postLogin: async (req, res)=> {
         const email = req.body.email
-        const user = await myScheme.findOne({email:email})
+        const user = await regSchema.findOne({email:email})
         if(user) {
             //bcrypt.hash(req.body.password,10,(err,hash)=>{console.log(hash)})
             bcrypt.compare(req.body.password, user.password, (err, result)=> {
@@ -41,6 +41,8 @@ module.exports = {
     },
     logout:(req,res)=>{
         req.session.isValidUser = false
+        req.session.userId = false;
+        req.session.userRole = false;
         res.cookie('isValidUser', false)
         res.redirect("/")
     },

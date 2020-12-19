@@ -1,4 +1,4 @@
-const myScheme = require('../models/scheme')
+const regSchema = require('../models/scheme').regSchema
 const bcrypt = require('bcrypt')
 const mail = require('../controllers/mail')
 
@@ -15,14 +15,14 @@ module.exports = {
         accountType = req.body.accountType
         age = req.body.age
         if (password1 === password2 && password1 != "") {
-            const emailId = await myScheme.findOne({ email: email })
+            const emailId = await regSchema.findOne({ email: email })
             if (emailId) {
                 req.flash('error', "Email already exists, try again")
                 return res.redirect('register')
             }
             bcrypt.hash(password1, 10, (err, hash) => {
                 if (!err) {
-                    user = new myScheme({
+                    user = new regSchema({
                         name: name,
                         password: hash,
                         email: email,
@@ -34,8 +34,8 @@ module.exports = {
                     user.save().then(async function(ress,er){
                         url = req.protocol + '://' + req.get('host')+"/VerifyMail?tokens="+ress.id;
                         curl = req.protocol + '://' + req.get('host')+"/contact"
-                        temp = require('../controllers/cnf_mail_template')
-                        await mail.send(email,"Account Verification - [CRS-BT]",temp.getTemplate(name,url,curl))
+                        cnf_mail = require('./mail_templates/acc_verification')
+                        await mail.send(email,"Account Verification - [CRS-BT]",cnf_mail.getTemplate(name,url,curl))
                         .then(function(msg){if(msg){
                             req.flash('success', "You have successfully registered..!")
                             req.flash('warning','Please Verify your Email Address')
