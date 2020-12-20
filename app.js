@@ -12,7 +12,7 @@ const app = express()
 app.use(cookieParser());
 app.use(session({
   secret: process.env.SECRET,
-  cookie: {  },
+  cookie: { maxAge: 60000*30 },
   resave: true,
   saveUninitialized: false
 }));
@@ -32,7 +32,7 @@ app.use(expressLayouts);
 app.use(express.static('public'))
 
 
-// ----------------------- Import Controllers --------------------------------
+// ----------------------- Import Controllers / URL Router --------------------------------
 const regController = require('./controllers/User');
 const loginController = require('./controllers/login');
 const dashboardController = require('./controllers/Dashboard');
@@ -41,7 +41,7 @@ const contactUs = require("./controllers/contactUs");
 const userController = require('./controllers/User')
 const authUser = require('./controllers/authUser')
 const mail = require('./controllers/mail')
-
+const rpass = require("./controllers/resetPassword")
 
 // ---------------------------- Use Controllers -----------------------
 // Home Page Handlers
@@ -56,6 +56,11 @@ app.post('/register', regController.register)
 // Login Handlers
 app.get('/login', loginController.login)
 app.post('/login', loginController.postLogin)
+
+//Forgot Reset Password Handlers
+app.post("/forgot",rpass.forgotPassword)
+app.get("/ResetPassword/:token",rpass.reset)
+app.post("/reset",rpass.setNewPwd)
 
 // Dashboard Handlers
 app.get('/Dashboard', dashboardController.dashboard)
