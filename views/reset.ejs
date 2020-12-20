@@ -16,19 +16,19 @@
             <!-- Card header -->
             <div class="px-card py-10 border-bottom">
                 <h2 class="card-title font-size-24 font-weight-bold m-0 text-center text-smoothing-antialiased-lm" style="color:rgb(250, 142, 0);">
-                    Login
+                    Reset Password
                 </h2>
             </div>
             <!-- Content -->
             <div class="content">
-                <form method="POST" action="/login">
+                <form method="POST" action="/reset">
                     <div class="form-group input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text">
                                 <i class="fa fa-envelope-o" aria-hidden="true"></i>
                             </span>
                         </div>
-                        <input type="email" name="email" class="form-control" placeholder="Your email"
+                        <input type="password" name="password1" class="form-control" placeholder="Enter New Password"
                             required="required" id="email">
                     </div>
                     <div class="form-group input-group">
@@ -37,24 +37,21 @@
                                 <i class="fa fa-key" aria-hidden="true"></i>
                             </span>
                         </div>
-                        <input type="password" name="password" class="form-control" placeholder="password"
+                        <input type="password" name="password2" class="form-control" placeholder="Confirm Password"
                             required="required" id="password">
                     </div>
-                    <input class="btn btn-primary btn-block" type="submit" value="Login">
+                    <input class="btn btn-primary btn-block" type="submit" value="Reset">
                 </form>
             </div>
             <!-- Card footer -->
             <div class="px-card py-10 bg-light-lm bg-very-dark-dm rounded-bottom">
-                <form action="forgot" method="post" class="form-inline">
-                    <div class="input-group">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text">Forgot</span>
-                      </div>
-                      <input type="text" class="form-control" name="email" placeholder="Enter email id" required id="if-2-income">
-                    </div>
-                    <button class="btn btn-primary btn-sm">Reset</button>
-                </form>
+                <div class="nav-link">
+                    <a>Know Password</a>
+                </div>
             </div>
         </div>
     </div>
 </center>
+<script>
+    $("nav").hide()
+</script>
