@@ -55,7 +55,7 @@ footer{
     position: sticky;
     top:0;
     font-size: 20px;
-    height: 350px;
+    height: 330px;
 }
 
 .marquee {
@@ -67,5 +67,5 @@ footer{
   #qt{
     position: sticky;
     position: -webkit-sticky;
-    top: 380px;
+    top: 360px;
   }

@@ -12,7 +12,7 @@ const app = express()
 app.use(cookieParser());
 app.use(session({
   secret: process.env.SECRET,
-  cookie: { maxAge: 60000*30 },
+  cookie: { },
   resave: true,
   saveUninitialized: false
 }));
