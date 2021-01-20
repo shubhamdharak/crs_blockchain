@@ -1,6 +1,6 @@
-const Schemes  = artifacts.require('Schemes');
+const Crs  = artifacts.require('Crs');
 
 module.exports = function (deployer) {
-    deployer.deploy(Schemes);
+    deployer.deploy(Crs);
   };
   
