@@ -7,7 +7,7 @@ function authenticate(req){
 module.exports ={
     dashboard: (req, res)=> {
         if(authenticate(req)){
-            if(req.session.userRole === "goverment"){
+            if(req.session.userRole === "Government Officer"){
                 res.render("govDashboard",{isValid:true,userRole:req.session.userRole})
             }
             else if(req.session.userRole === "vendor"){
