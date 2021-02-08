@@ -10,6 +10,7 @@
 <%if (messages.infos) { %>
     <script>toastAlert("Information", "<%= messages.infos %>", "alert-primary");</script>
 <% } %>
+
 <!-- slider -->
 <Section class="img-slider" style="width:100%">
     <div class="slider-container">
@@ -35,8 +36,23 @@
     <div class="container-fluid">
         <div class="row row-eq-spacing-lg">
             <div class="col-lg-9">
+                <% if (allSchemes) { %>
+                    <% allSchemes.forEach(function(scheme) { %>
+                        <div class="card">
+                            <h2 class="card-title">
+                                <%= scheme.name %>
+                            </h2>
+                            <div class="fake-content"></div>
+                            <div class="fake-content"></div>
+                            <div class="fake-content"></div>
+        
+                            <button class="btn btn-primary btn-sm" type="button" onclick="toastAlert()">Toast!</button>
+        
+                        </div>
+                    <% }); %>
 
-
+                <% } else { %>
+                
                 <!-- Page Content -->
 
                 <div class="card">
@@ -122,7 +138,7 @@
                     <div class="fake-content w-150"></div>
                 </div>
             </div>
-
+        <% } %>
             <!-- Notification Window -->
             <div class="col-lg-3 right-0" style="margin-top:0px;">
                 <div class="card content notification_window" style="overflow: hidden">

@@ -14,4 +14,6 @@ async function initWeb() {
     })
 }
 
+const connection = require("../connection");
+
 module.exports = initWeb
