@@ -18,6 +18,7 @@ module.exports = {
                         req.session.userRole = user.accountType;
                         res.cookie('isValidUser', true)
                         res.cookie('user_name', user.name)
+                        res.cookie('userRole', user.accountType)
                         req.flash('success', "Welcome, "+user.name)
                         return res.redirect('Dashboard')
                     }
