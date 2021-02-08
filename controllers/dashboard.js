@@ -1,3 +1,6 @@
+const { default: Web3 } = require('web3')
+const connection = require('../connection')
+
 function authenticate(req){
     if(req.session.isValidUser === undefined || req.session.userId === undefined || req.session.userRole === undefined ){
         return false
@@ -5,10 +8,18 @@ function authenticate(req){
     else return req.session.userId
 }
 module.exports ={
-    dashboard: (req, res)=> {
+    dashboard: (req, res, next)=> {
         if(authenticate(req)){
             if(req.session.userRole === "Government Officer"){
-                res.render("govDashboard",{isValid:true,userRole:req.session.userRole})
+                connection.initWeb3().then(()=> {
+                    res.render("govDashboard",{isValid:true,userRole:req.session.userRole})
+                })
+                .catch((e)=> {
+                    console.log(e.message)
+                    req.flash('error', "Cannot connect to network")
+                    res.render("govDashboard",{isValid:true,userRole:req.session.userRole})
+                })
+                
             }
             else if(req.session.userRole === "vendor"){
                 res.render("userDashboard",{isValid:true,userRole:req.session.userRole})
