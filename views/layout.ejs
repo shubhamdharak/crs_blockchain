@@ -77,12 +77,16 @@
                 <li class="nav-item">
                     <a href="contact" class="nav-link">Contact us</a>
                 </li>
+                <li class="nav-item" id="dash">
+                    <a href="Dashboard" class="nav-link" id="dashbtn">Dashboard</a>
+                </li>
                 <li class="nav-item" id="reg">
                     <a href="register" class="nav-link">Register</a>
                 </li>
                 <li class="nav-item" id="log">
                     <a href="login" class="nav-link">Login</a>
                 </li>
+    
                 <li class="nav-item" id="validUser">
                     <a href="logout" class="badge-group" role="group" style="margin-top: 12px;">
                         <span class="badge" id=username style=" padding: 5px"></span>
@@ -104,6 +108,7 @@
                         <a href="#" class="dropdown-item">About us</a>
                         <a href="/contact" class="dropdown-item">contact us</a>
                         <div class="dropdown-divider"></div>
+                        <a href="/Dashboard" class="dropdown-item" id="dashbtn">Dashboard</a>
                         <a href="/login" class="dropdown-item" id="logbtn">Login</a>
                         <a href="/register" class="dropdown-item" id="regbtn">Register</a>
                         <a href="/logout" class="dropdown-item" id="loutbtn">Logout</a>
@@ -134,7 +139,7 @@
                     content: alertContent,
                     title: title,
                     alertType: type,
-                    timeShown: 3000,
+                    timeShown: 5000,
                     fillType: "filled-lm"
                 })
 
@@ -143,6 +148,9 @@
         <div class="content-wrapper">
             <div class="container-fluid">
                 <%- body %>
+                
+        
+
             </div>
         </div>
 
@@ -191,7 +199,10 @@
         $("#logbtn").hide()
         $("#regbtn").hide()
         document.getElementById("username").innerHTML = decodeURIComponent(getCookie("user_name"));
+        document.getElementById("userRole").innerHTML = decodeURIComponent(getCookie("userRole"));
+        
         $("#validUser").show()
+        $("#dashbtn").show()
         $("#loutbtn").show()
 
     }
@@ -200,6 +211,8 @@
         $("#loutbtn").hide()
         $("#logbtn").show()
         $("#regbtn").show()
+        $("#dash").hide()
+        $("#dashbtn").hide()
     }
 
     //Script to set Set user prefered Dark/light mode to every page
