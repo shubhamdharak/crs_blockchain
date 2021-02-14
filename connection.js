@@ -1,7 +1,7 @@
 const Web3 = require('web3')
 
 let web3;
-contractAddress = '0x54CF294ae7e864003515039ed84EFC84ba0Ab208'
+contractAddress = '0x3e4ad7BEFa1dD23fF19F41f8Ed9F94873aD33f4A'
 ABI = [
 	{
 		"anonymous": false,
@@ -89,9 +89,9 @@ ABI = [
 				"type": "string"
 			},
 			{
-				"internalType": "address",
-				"name": "_owner",
-				"type": "address"
+				"internalType": "string",
+				"name": "_description",
+				"type": "string"
 			},
 			{
 				"internalType": "uint256",
@@ -117,6 +117,12 @@ ABI = [
 				"indexed": false,
 				"internalType": "string",
 				"name": "name",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "description",
 				"type": "string"
 			},
 			{
@@ -345,6 +351,11 @@ ABI = [
 			},
 			{
 				"internalType": "string",
+				"name": "_description",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
 				"name": "_date",
 				"type": "string"
 			},
@@ -371,6 +382,11 @@ ABI = [
 					{
 						"internalType": "string",
 						"name": "name",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "description",
 						"type": "string"
 					},
 					{
@@ -533,6 +549,11 @@ ABI = [
 					},
 					{
 						"internalType": "string",
+						"name": "description",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
 						"name": "date",
 						"type": "string"
 					},
@@ -668,6 +689,11 @@ ABI = [
 					},
 					{
 						"internalType": "string",
+						"name": "description",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
 						"name": "date",
 						"type": "string"
 					},
@@ -782,6 +808,11 @@ ABI = [
 			},
 			{
 				"internalType": "string",
+				"name": "description",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
 				"name": "date",
 				"type": "string"
 			},
@@ -825,12 +856,6 @@ ABI = [
 ]
 module.exports = {
     initWeb3: (req, res, next)=> {
-        // if (global.web3) {
-        //     console.log(`Metamask connected ! ${global.web3}`);
-        //     global.web3 = new Web3(global.web3.currentProvider);
-        //     ethereum.enable();
-        //     return true;
-        // }
         global.web3 = new Web3()
         global.web3.setProvider(new Web3.providers.WebsocketProvider('ws://localhost:8545'));  
         return  global.web3.eth.net.isListening()

@@ -47,7 +47,7 @@ const operations = require('./controllers/operations')
 
 // ---------------------------- Use Controllers -----------------------
 // Home Page Handlers
-app.get("/", operations.getAllSchemes);
+app.get("/", operations.index);
 
 // Registration Handlers
 app.get("/register", regController.getData);
@@ -68,6 +68,12 @@ app.get("/Dashboard", dashboardController.dashboard);
 // Logout Handlers
 app.get("/logout", loginController.logout);
 
+
+// Action Handlers
+app.get('/getAScheme/:id', operations.getAScheme)
+app.post('/addScheme', operations.addScheme)
+app.get('/deleteScheme/:id', operations.deleteScheme)
+
 // ContactUs Handlers
 app.get("/contact", contactUs.getPage);
 app.post("/contact", contactUs.storeQuery);
@@ -79,5 +85,5 @@ app.get("/VerifyMail", verifyEmail.verify);
 // ---------------------------- Init Server -------------------
 // Start Server
 app.listen(process.env.PORT || 3000, () =>
-  console.log(`Server running on ${process.env.PORT}`)
+  console.log(` Server running on ${process.env.PORT}`) 
 );
