@@ -17,6 +17,7 @@ contract userContract {
     struct Scheme {
         uint id;
         string name;
+        string description;
         string date;
         address owner;
         uint cost;
@@ -48,6 +49,7 @@ contract userContract {
     event Addscheme (
         uint id,
         string name,
+        string description,
         string date,
         address owner,
         uint cost,
@@ -108,15 +110,15 @@ contract userContract {
         
     }
     
-    function addScheme(string memory _name, string memory _date, address _owner, uint  _cost) public {
+    function addScheme(string memory _name, string memory _date, string memory _description, uint  _cost) public {
         require(bytes(_name).length > 0 , "Name should not be null");
-        require(_owner != address(0x0), "Address should not be null");
+        // require(_owner != address(0x0), "Address should not be null"); for initial 0x0 must be owner
         require(_cost > 0, "Invalid cost");
         schemeCount++;
         
         // Add scheme to Scheme structure with mapping schemes
-        schemes[schemeCount] = Scheme(schemeCount, _name, _date, _owner, _cost, now, false);
-        emit Addscheme(schemeCount, _name, _date, _owner, _cost, now);
+        schemes[schemeCount] = Scheme(schemeCount, _name,_description, _date, msg.sender, _cost, block.timestamp , false);
+        emit Addscheme(schemeCount, _name,_description, _date, msg.sender, _cost, block.timestamp);
     }
     
     function removeScheme(uint  _id) public returns(string memory) {
@@ -132,10 +134,10 @@ contract userContract {
         }
     }
     
-    function updateScheme(uint _id,string memory _name, string memory _date, address _owner, uint  _cost) public returns(Scheme memory) {
+    function updateScheme(uint _id,string memory _name,string memory _description, string memory _date, address _owner, uint  _cost) public returns(Scheme memory) {
         require(_id >= schemeCount);
         if(_id == schemes[_id].id) {
-            schemes[_id] = Scheme(_id, _name, _date, _owner, _cost, now , false);
+            schemes[_id] = Scheme(_id, _name, _description, _date, _owner, _cost, now , false);
             return schemes[_id];
         }
     }
