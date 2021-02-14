@@ -31,114 +31,151 @@
     </div>
 </Section>
 
+<div class="modal modal-full ie-scroll-fix" id="modal-5" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <a href="#" class="close" role="button" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </a>
+        <div class="container">
+          <div class="row">
+            <div class="col-md-8 offset-md-2" id="scheme">
+              <!-- Article here -->
+                <div id="scheme_title"></div>
+                <div id="scheme_date"></div>
+                <div id="scheme_cost"></div>
+                <div id="scheme_desc"></div>
+                <div id="scheme_status"></div>
+                <button class="btn btn-success">Make a Bid</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 <!-- Content wrapper start -->
 <div>
     <div class="container-fluid">
         <div class="row row-eq-spacing-lg">
             <div class="col-lg-9">
-                <% if (allSchemes) { %>
-                    <% allSchemes.forEach(function(scheme) { %>
-                        <div class="card">
-                            <h2 class="card-title">
-                                <%= scheme.name %>
-                            </h2>
-                            <div class="fake-content"></div>
-                            <div class="fake-content"></div>
-                            <div class="fake-content"></div>
-        
-                            <button class="btn btn-primary btn-sm" type="button" onclick="toastAlert()">Toast!</button>
-        
-                        </div>
-                    <% }); %>
+                <% if ( typeof allSchemes != 'object' ) { %>
+                    <div class="card">
+                        <h2 class="card-title">
+                            Card title
+                        </h2>
+                        <div class="fake-content"></div>
+                        <div class="fake-content"></div>
+                        <div class="fake-content"></div>
+    
+                        <button class="btn btn-primary btn-sm" type="button" onclick="toastAlert()">Toast!</button>
+    
+                    </div>
+                    <div class="card">
+                        <h2 class="card-title">
+                            Card title
+                        </h2>
+                        <div class="fake-content"></div>
+                        <div class="fake-content"></div>
+                        <div class="fake-content"></div>
+    
+                        <button class="btn btn-primary btn-sm" type="button" onclick="toastAlert()">Toast!</button>
+    
+                    </div>
+                    <div class="card">
+                        <h2 class="card-title">
+                            Card title
+                        </h2>
+                        <div class="fake-content"></div>
+                        <div class="fake-content"></div>
+                        <div class="fake-content"></div>
+    
+                        <button class="btn btn-primary btn-sm" type="button" onclick="toastAlert()">Toast!</button>
+    
+                    </div>
+                    <div class="card">
+                        <h2 class="card-title">
+                            Card title
+                        </h2>
+                        <div class="fake-content"></div>
+                        <div class="fake-content"></div>
+                        <div class="fake-content"></div>
+    
+                        <button class="btn btn-primary btn-sm" type="button" onclick="toastAlert()">Toast!</button>
+    
+                    </div>
+                    <div class="card">
+                        <h2 class="card-title">
+                            Card title
+                        </h2>
+                        <div class="fake-content"></div>
+                        <div class="fake-content"></div>
+                        <div class="fake-content"></div>
+    
+                        <button class="btn btn-primary btn-sm" type="button" onclick="toastAlert()">Toast!</button>
+    
+                    </div>
+                    <div class="card">
+                        <h2 class="card-title">
+                            Card title
+                        </h2>
+                        <div class="fake-content"></div>
+                        <div class="fake-content"></div>
+                        <div class="fake-content"></div>
+    
+                        <button class="btn btn-primary btn-sm" type="button" onclick="toastAlert()">Toast!</button>
+    
+                    </div>
+                    <div class="card">
+                        <h2 class="card-title">
+                            Card title
+                        </h2>
+                        <div class="fake-content"></div>
+                        <div class="fake-content"></div>
+                        <div class="fake-content"></div>
+    
+                        <button class="btn btn-primary btn-sm" type="button" onclick="toastAlert()">Toast!</button>
+    
+                    </div>
+    
+                    <div class="content">
+                        <div class="fake-content"></div>
+                        <div class="fake-content w-150"></div>
+                    </div>
 
-                <% } else { %>
+                    <% } else { %>
                 
-                <!-- Page Content -->
+                        <!-- Page Content -->
+        
+                        <%  allSchemes.forEach(function(scheme) { %>
+                            <div class="card">
+                                <h2 class="card-title text-capitalize font-weight-bold">
+                                    <%= scheme.name %>
+                                </h2>
+                                <div class="fake-content">
+                                    <span><h7 class="font-weight-semi-bold">Date of Published : </h7><%= scheme.date %></span> 
+                                </div>
+                                <div class="fake-content">
+                                    <h6>Deatils : <span><%= scheme.description %> TODO</span></h6>
+                                </div>
+                                <div class="fake-content">
+                                    <h6>Cost :<span> <%= scheme.cost %> </span></h6>
+                                </div>
+                                <div class="fake-content">
+                                    <h6>Status : <span class="badge badge-success">Active</span> </h6> 
+                                </div>
+            
+                                <a href="#modal-5" class="btn btn-primary" role="button" id="<%= scheme.id %>" onclick="getAscheme('<%= scheme.id %>')">View Details</a>
+                                
+                            </div>
 
-                <div class="card">
-                    <h2 class="card-title">
-                        Card title
-                    </h2>
-                    <div class="fake-content"></div>
-                    <div class="fake-content"></div>
-                    <div class="fake-content"></div>
+                <% }) } %>
 
-                    <button class="btn btn-primary btn-sm" type="button" onclick="toastAlert()">Toast!</button>
+                <!-- Column end here -->
+            </div> 
 
-                </div>
-                <div class="card">
-                    <h2 class="card-title">
-                        Card title
-                    </h2>
-                    <div class="fake-content"></div>
-                    <div class="fake-content"></div>
-                    <div class="fake-content"></div>
+                
 
-                    <button class="btn btn-primary btn-sm" type="button" onclick="toastAlert()">Toast!</button>
-
-                </div>
-                <div class="card">
-                    <h2 class="card-title">
-                        Card title
-                    </h2>
-                    <div class="fake-content"></div>
-                    <div class="fake-content"></div>
-                    <div class="fake-content"></div>
-
-                    <button class="btn btn-primary btn-sm" type="button" onclick="toastAlert()">Toast!</button>
-
-                </div>
-                <div class="card">
-                    <h2 class="card-title">
-                        Card title
-                    </h2>
-                    <div class="fake-content"></div>
-                    <div class="fake-content"></div>
-                    <div class="fake-content"></div>
-
-                    <button class="btn btn-primary btn-sm" type="button" onclick="toastAlert()">Toast!</button>
-
-                </div>
-                <div class="card">
-                    <h2 class="card-title">
-                        Card title
-                    </h2>
-                    <div class="fake-content"></div>
-                    <div class="fake-content"></div>
-                    <div class="fake-content"></div>
-
-                    <button class="btn btn-primary btn-sm" type="button" onclick="toastAlert()">Toast!</button>
-
-                </div>
-                <div class="card">
-                    <h2 class="card-title">
-                        Card title
-                    </h2>
-                    <div class="fake-content"></div>
-                    <div class="fake-content"></div>
-                    <div class="fake-content"></div>
-
-                    <button class="btn btn-primary btn-sm" type="button" onclick="toastAlert()">Toast!</button>
-
-                </div>
-                <div class="card">
-                    <h2 class="card-title">
-                        Card title
-                    </h2>
-                    <div class="fake-content"></div>
-                    <div class="fake-content"></div>
-                    <div class="fake-content"></div>
-
-                    <button class="btn btn-primary btn-sm" type="button" onclick="toastAlert()">Toast!</button>
-
-                </div>
-
-                <div class="content">
-                    <div class="fake-content"></div>
-                    <div class="fake-content w-150"></div>
-                </div>
-            </div>
-        <% } %>
             <!-- Notification Window -->
             <div class="col-lg-3 right-0" style="margin-top:0px;">
                 <div class="card content notification_window" style="overflow: hidden">
@@ -168,6 +205,7 @@
                     <b id="qot"></b>
                 </div>
             </div>
+            <!-- Row ends here -->
 
         </div>
     </div>
@@ -219,4 +257,15 @@
     $("document").ready(function () {
         $("#ftr").hide()
     })
+
+    function getAscheme(id) {
+        console.log(id);
+        $.get(`/getAScheme/${id}`, function(data, status) {
+            console.log(data);
+            $('#scheme_title').html(data[1])
+            $('#scheme_cost').html(data[2])
+            $('#scheme_desc').html(data[3])
+            $('#scheme_status').html(data[4])
+        })
+    }
 </script>

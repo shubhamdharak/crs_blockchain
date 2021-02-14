@@ -26,7 +26,7 @@
             <br />
             <h5 class="sidebar-title">Productivity</h5>
             <div class="sidebar-divider"></div>
-            <a href="#" class="sidebar-link sidebar-link-with-icon">
+            <a href="#modal-2" class="sidebar-link sidebar-link-with-icon">
                 <span class="sidebar-icon bg-primary text-white rounded-circle">
                     <!-- bg-primary = background-color: var(--primary-color), text-white = color: white, rounded-circle = border-radius: 50% -->
                     <i class="fa fa-file-word-o" aria-hidden="true"></i>
@@ -57,7 +57,40 @@
         </div>
     </div>
     <!-- Side Navagation End -->
+
+    <!-- Modal for add new scheme -->
+    <div class="modal" id="modal-2" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <a href="#" class="btn close" role="button" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </a>
+            <h5 class="modal-title">Add A New Scheme</h5>
+            <form action="/addScheme" method="post">
+              <div class="form-group">
+                <label for="name" class="required">Name</label>
+                <input type="text" name="name" id="name" class="form-control" placeholder="Scheme Name" required="required">
+              </div>
+              <div class="form-group">
+                <label for="cost" class="required">Cost</label>
+                <input type="text" id="cost" name="cost" class="form-control" placeholder="Cost of Scheme" required="required">
+              </div>
+              <div class="form-group">
+                <label for="desc" class="required">Description</label>
+                <textarea class="form-control" name="description" placeholder="Give detailed description about scheme/ project"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="date" class="required">Date</label>
+                <input type="date" id="date" name="date" class="form-control" placeholder="Date" required="required">
+              </div>
+              <input class="btn btn-danger btn-block" type="submit" value="Launch Scheme">
+            </form>
+          </div>
+        </div>
+      </div>
+
     <!-- Dashboard Content -->
+    <% if (typeof allSchemes != 'object') { %>
     <div class="card">
         
         <div class="row">
@@ -98,10 +131,43 @@
             </div>
         </div>
     </div>
+
+    <% } else { %>
+        
+        <% allSchemes.forEach((scheme)=> { %>
+    </div><div class="card">
+        <div class="row">
+            <div class="col-10">
+                <h2 class="card-title">
+                    <%= scheme.name %>
+                    <span class="badge badge-danger">New</span>
+                </h2>
+                
+                <div><%= scheme.description.substring(0,350) %> ....</div>
+                <div>Name of Vendors who are interested in this Scheme</div>
+                <div>Date of Published : <%= scheme.date %></div>
+                <div>Time and Budget Estimation : <%= scheme.cost %></div>
+            </div>
+            <div class="col-2">
+                <button class="btn btn-success btn-sm" id="<%= scheme.id %>" onClick="deleteScheme('<%= scheme.id %>')" style="margin:10px;" type="button">Delete Scheme</button>
+                <button class="btn btn-secondary btn-sm" id="<%= scheme.id %>" onClick="" style="margin:10px;" type="button">Action Buttons</button>
+                <button class="btn btn-primary btn-sm" id="<%= scheme.id %>" onClick="updateScheme('<%= scheme.id %>')" style="margin:10px;" type="button">Update Scheme</button>
+            </div>
+        </div>
+        <% })  %>
+    </div>
+    <% } %>
     <!-- Dashboard Content End -->
     <script>
         // Change user Role
         document.getElementById("userRole").innerHTML = "<%= userRole %>"
         // Add Sidebar to Page
         $("#sidebar").addClass("with-sidebar")
+
+        function deleteScheme(id) {
+            $.get(`/deleteScheme/${id}`, (data, status)=> {
+                console.log(data);
+                allSchemes = data
+            });
+        }
     </script>
