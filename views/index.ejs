@@ -148,27 +148,28 @@
                         <!-- Page Content -->
         
                         <%  allSchemes.forEach(function(scheme) { %>
-                            <div class="card">
-                                <h2 class="card-title text-capitalize font-weight-bold">
-                                    <%= scheme.name %>
-                                </h2>
-                                <div class="fake-content">
-                                    <span><h7 class="font-weight-semi-bold">Date of Published : </h7><%= scheme.date %></span> 
+                            <% if(scheme.id != 0) { %>
+                                <div class="card">
+                                    <h2 class="card-title text-capitalize font-weight-bold">
+                                        <%= scheme.name %>
+                                    </h2>
+                                    <div class="fake-content">
+                                        <span><h7 class="font-weight-semi-bold">Date of Published : </h7><%= scheme.date %></span> 
+                                    </div>
+                                    <div class="fake-content">
+                                        <h6>Deatils : <span><%= scheme.description %> TODO</span></h6>
+                                    </div>
+                                    <div class="fake-content">
+                                        <h6>Cost :<span> <%= scheme.cost %> </span></h6>
+                                    </div>
+                                    <div class="fake-content">
+                                        <h6>Status : <span class="badge badge-success">Active</span> </h6> 
+                                    </div>
+                
+                                    <a href="#modal-5" class="btn btn-primary" role="button" id="<%= scheme.id %>" onclick="getAscheme('<%= scheme.id %>')">View Details</a>
+                                    
                                 </div>
-                                <div class="fake-content">
-                                    <h6>Deatils : <span><%= scheme.description %> TODO</span></h6>
-                                </div>
-                                <div class="fake-content">
-                                    <h6>Cost :<span> <%= scheme.cost %> </span></h6>
-                                </div>
-                                <div class="fake-content">
-                                    <h6>Status : <span class="badge badge-success">Active</span> </h6> 
-                                </div>
-            
-                                <a href="#modal-5" class="btn btn-primary" role="button" id="<%= scheme.id %>" onclick="getAscheme('<%= scheme.id %>')">View Details</a>
-                                
-                            </div>
-
+                                <% }  %>
                 <% }) } %>
 
                 <!-- Column end here -->
