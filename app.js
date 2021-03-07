@@ -73,7 +73,7 @@ app.get("/logout", loginController.logout);
 app.get('/getAScheme/:id', operations.getAScheme)
 app.post('/addScheme', operations.addScheme)
 app.get('/deleteScheme/:id', operations.deleteScheme)
-app.get('/updateScheme/:id', operations.updateScheme)
+app.post('/updateScheme', operations.updateScheme)
 
 // ContactUs Handlers
 app.get("/contact", contactUs.getPage);

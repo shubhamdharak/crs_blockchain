@@ -43,7 +43,7 @@ module.exports = {
     addScheme: async (req, res) => {
         const { name, cost, description, date } = req.body
         try {
-            const scheme = await connection.initContract().methods.addScheme(name, date, description,cost).send({from: '0xc83DF5D66DBb599072D80bCd9712c6D717eC8528', gas:3000000})
+            const scheme = await connection.initContract().methods.addScheme(name, date, description,cost).send({from: '0x6fAd1A644AB8a32CEEDfC16A62Def2a1C5759D92', gas:3000000})
             console.log(scheme);
             const allSchemes = await connection.initContract().methods.allSchemes().call()
             return  res.render("govDashboard",{isValid:true,userRole:req.session.userRole,allSchemes:allSchemes })
@@ -57,9 +57,8 @@ module.exports = {
     deleteScheme: async (req, res)=> {
         const scheme_id  = parseInt(req.params.id)
         try {
-            const result = await connection.initContract().methods.removeScheme(scheme_id).send({from : '0xc83DF5D66DBb599072D80bCd9712c6D717eC8528'})
+            const result = await connection.initContract().methods.removeScheme(scheme_id).send({from : '0x6fAd1A644AB8a32CEEDfC16A62Def2a1C5759D92'})
             res.status(200).json({success: "Deleted"})
-            // return  res.render("govDashboard",{isValid:true,userRole:req.session.userRole})
 
         } catch (error) {
             console.log(error)
@@ -68,12 +67,16 @@ module.exports = {
 
     },
     updateScheme: async (req, res) => {
-        const scheme_id = parseInt(req.params.id)
-        const scheme = await connection.initContract().methods.getScheme(scheme_id).call()
-        .catch(error => {
+        const {scheme_id, name, cost, description, date} = req.body
+        try {
+            const result = await connection.initContract().methods.updateScheme(scheme_id, name, description, date,cost).send({from: '0x6fAd1A644AB8a32CEEDfC16A62Def2a1C5759D92'})
+            const allSchemes = await connection.initContract().methods.allSchemes().call()
+            return  res.render("govDashboard",{isValid:true,userRole:req.session.userRole, allSchemes:allSchemes})
+
+        } catch (error) {
             console.log(error.message);
-            res.send("error")
-        })
-        res.render('updateScheme', {scheme: "sai"})
+            req.flash('error', 'Updating scheme fails due to errors')
+            return  res.render("govDashboard",{isValid:true,userRole:req.session.userRole})
+        }
     }
 };
