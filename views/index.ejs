@@ -40,12 +40,19 @@
         <div class="container">
           <div class="row">
             <div class="col-md-8 offset-md-2" id="scheme">
-              <!-- Article here -->
-                <div id="scheme_title"></div>
-                <div id="scheme_date"></div>
-                <div id="scheme_cost"></div>
-                <div id="scheme_desc"></div>
-                <div id="scheme_status"></div>
+                <h2 id="scheme_title" class="mt-10 mb-10 font-weight-medium"></h2>
+                <div class="d-flex flex-row">
+                    <h5 class="mt-6">Publish On : - </h5>
+                    <span id="scheme_date" class="font-size-16 font-weight-medium mt-10 ml-10"></span>
+                </div>
+                <div >
+                    <img src="dummy.png" alt="" srcset="">
+                </div>
+                <div class="font-size-20 d-flex flex-row">
+                    <h4>Estimate Cost : </h4>
+                    <h4 id="scheme_cost"></h4>
+                </div>
+                    <p id="scheme_desc" class="font-size-20"></p>
                 <button class="btn btn-success">Make a Bid</button>
             </div>
           </div>
@@ -264,9 +271,9 @@
         $.get(`/getAScheme/${id}`, function(data, status) {
             console.log(data);
             $('#scheme_title').html(data[1])
-            $('#scheme_cost').html(data[2])
-            $('#scheme_desc').html(data[3])
-            $('#scheme_status').html(data[4])
+            $('#scheme_desc').html(data[2])
+            $('#scheme_date').html(data[3])
+            $('#scheme_cost').html(data[5])
         })
     }
 </script>
