@@ -2,7 +2,7 @@ const { connect } = require("mongoose");
 const connection = require("../connection");
 const getAllSchemes = require('./getData')
 
-const sender = '0xf7C6001673829b586c6229fB615C1dE7bfCcf4CF'
+const sender = '0xC9295924D927a21539a61868dbe99f5d19cBF451'
 
 module.exports = {
     index: async (req, res) => {
@@ -80,6 +80,55 @@ module.exports = {
             console.log(error.message);
             req.flash('error', 'Updating scheme fails due to errors')
             return  res.render("govDashboard",{isValid:true,userRole:req.session.userRole})
+        }
+    },
+    getAMaterial : async (req, res)=> {
+        const material_id = parseInt(req.params.id )
+        try {
+            const material = await connection.initContract().methods.getMaterial(material_id).call();
+            res.status(200).json(material)
+            
+        } catch (error) {
+            res.status(404).json({error: error})
+        }
+    },
+    addMaterial : async (req, res)=> {
+        const { name, cost } = req.body
+        try {
+            const material = await connection.initContract().methods.addMaterial(name, sender,cost).send({from: sender, gas:3000000})
+            console.log(material);
+            const allMaterials = await connection.initContract().methods.allMaterials().call()
+            return  res.render("userDashboard",{isValid:true,userRole:req.session.userRole,allMaterials:allMaterials })
+
+        } catch(error) {
+            req.flash('error', 'Something wents wrong')
+            console.log(error.message);
+            return  res.render("userDashboard",{isValid:true,userRole:req.session.userRole})
+        }
+    },
+    deleteMaterial : async (req, res)=> {
+        const material_id  = parseInt(req.params.id)
+        try {
+            const result = await connection.initContract().methods.removeMaterial(material_id).send({from : sender})
+            res.status(200).json({success: "Deleted"})
+
+        } catch (error) {
+            console.log(error)
+            res.status(404).json({error: error})
+        }
+
+    },
+    updateMaterial : async (req, res)=> {
+        const {Material_id, name, cost} = req.body
+        try {
+            const result = await connection.initContract().methods.updateMaterial(Material_id,name,sender,cost).send({from: sender})
+            const allMaterials = await connection.initContract().methods.allMaterials().call()
+            return  res.render("userDashboard",{isValid:true,userRole:req.session.userRole, allMaterials:allMaterials})
+
+        } catch (error) {
+            console.log(error.message);
+            req.flash('error', 'Updating scheme fails due to errors')
+            return  res.render("userDashboard",{isValid:true,userRole:req.session.userRole})
         }
     }
 };

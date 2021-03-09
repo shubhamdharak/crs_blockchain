@@ -75,6 +75,11 @@ app.post('/addScheme', operations.addScheme)
 app.get('/deleteScheme/:id', operations.deleteScheme)
 app.post('/updateScheme', operations.updateScheme)
 
+app.get('/getAMaterial/:id', operations.getAMaterial)
+app.post('/addMaterial', operations.addMaterial)
+app.get('/deleteMaterial/:id', operations.deleteMaterial)
+app.post('/updateMaterial', operations.updateMaterial)
+
 // ContactUs Handlers
 app.get("/contact", contactUs.getPage);
 app.post("/contact", contactUs.storeQuery);

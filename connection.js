@@ -1,7 +1,7 @@
 const Web3 = require('web3')
 
 let web3;
-contractAddress = '0xefC9f06b30a1148c47FC3aD533E9258e07537F41'
+contractAddress = '0x9493155065c9E48a93223c7E50857F46aD3cE732'
 ABI = [
 	{
 		"anonymous": false,
