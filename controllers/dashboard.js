@@ -9,7 +9,7 @@ function authenticate(req){
     else return req.session.userId
 }
 module.exports ={
-    dashboard:  (req, res, next)=> {
+    dashboard: async (req, res, next)=> {
         if(authenticate(req)){
             if(req.session.userRole === "Government Officer"){
                 connection.initWeb3().then( async ()=> {
@@ -24,7 +24,8 @@ module.exports ={
                 
             }
             else if(req.session.userRole === "vendor"){
-                res.render("userDashboard",{isValid:true,userRole:req.session.userRole})
+                const allMaterials = await connection.initContract().methods.allMaterials().call()
+                res.render("userDashboard",{isValid:true,userRole:req.session.userRole,allMaterials:allMaterials})
             }
         }
         else{
