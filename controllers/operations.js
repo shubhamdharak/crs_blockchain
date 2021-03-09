@@ -1,6 +1,9 @@
 const { connect } = require("mongoose");
 const connection = require("../connection");
 const getAllSchemes = require('./getData')
+
+const sender = '0xf7C6001673829b586c6229fB615C1dE7bfCcf4CF'
+
 module.exports = {
     index: async (req, res) => {
         connection.initWeb3().catch(e=> {
@@ -43,7 +46,7 @@ module.exports = {
     addScheme: async (req, res) => {
         const { name, cost, description, date } = req.body
         try {
-            const scheme = await connection.initContract().methods.addScheme(name, date, description,cost).send({from: '0x6fAd1A644AB8a32CEEDfC16A62Def2a1C5759D92', gas:3000000})
+            const scheme = await connection.initContract().methods.addScheme(name, date, description,cost).send({from: sender, gas:3000000})
             console.log(scheme);
             const allSchemes = await connection.initContract().methods.allSchemes().call()
             return  res.render("govDashboard",{isValid:true,userRole:req.session.userRole,allSchemes:allSchemes })
@@ -57,7 +60,7 @@ module.exports = {
     deleteScheme: async (req, res)=> {
         const scheme_id  = parseInt(req.params.id)
         try {
-            const result = await connection.initContract().methods.removeScheme(scheme_id).send({from : '0x6fAd1A644AB8a32CEEDfC16A62Def2a1C5759D92'})
+            const result = await connection.initContract().methods.removeScheme(scheme_id).send({from : sender})
             res.status(200).json({success: "Deleted"})
 
         } catch (error) {
@@ -69,7 +72,7 @@ module.exports = {
     updateScheme: async (req, res) => {
         const {scheme_id, name, cost, description, date} = req.body
         try {
-            const result = await connection.initContract().methods.updateScheme(scheme_id, name, description, date,cost).send({from: '0x6fAd1A644AB8a32CEEDfC16A62Def2a1C5759D92'})
+            const result = await connection.initContract().methods.updateScheme(scheme_id, name, description, date,cost).send({from: sender})
             const allSchemes = await connection.initContract().methods.allSchemes().call()
             return  res.render("govDashboard",{isValid:true,userRole:req.session.userRole, allSchemes:allSchemes})
 
