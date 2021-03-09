@@ -173,7 +173,7 @@ contract userContract {
     }
     
     function updateMaterial(uint _id,string memory _name, address _owner, uint  _price) public returns(Material memory) {
-        require(_id >= materialCount, "Invalid Id");
+        require(_id <= materialCount, "Invalid Id");
         if(_id == materials[_id].id) {
             materials[_id] = Material(_id, _name, _owner, _price);
             return materials[_id];
