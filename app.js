@@ -68,13 +68,15 @@ app.get("/Dashboard", dashboardController.dashboard);
 // Logout Handlers
 app.get("/logout", loginController.logout);
 
+app.get('/transactions', operations.transactions)
 
-// Action Handlers
+// Action Handlers for schemes
 app.get('/getAScheme/:id', operations.getAScheme)
 app.post('/addScheme', operations.addScheme)
 app.get('/deleteScheme/:id', operations.deleteScheme)
 app.post('/updateScheme', operations.updateScheme)
 
+// Action handler for Matrials 
 app.get('/getAMaterial/:id', operations.getAMaterial)
 app.post('/addMaterial', operations.addMaterial)
 app.get('/deleteMaterial/:id', operations.deleteMaterial)
@@ -91,5 +93,5 @@ app.get("/VerifyMail", verifyEmail.verify);
 // ---------------------------- Init Server -------------------
 // Start Server
 app.listen(process.env.PORT || 3000, () =>
-  console.log(` Server running on ${process.env.PORT}`) 
+  console.log(`Server running on port ${process.env.PORT}`) 
 );

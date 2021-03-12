@@ -1,8 +1,25 @@
-const { connect } = require("mongoose");
+const { default: Web3 } = require("web3");
 const connection = require("../connection");
-const getAllSchemes = require('./getData')
+const Transaction = require('../models/TransactionModel')
 
-const sender = '0xC9295924D927a21539a61868dbe99f5d19cBF451'
+let sender =  '0xE3E314b91eC3D6A9bFC8c3d1899B811289583EC3'
+
+async function transaction(req, res, scheme) {
+    const data = await new Transaction({
+        transactionHash : scheme.transactionHash,
+        blockNumber : scheme.blockNumber
+    })
+    .save()
+    .then( async ()=> {
+        const allSchemes = await connection.initContract().methods.allSchemes().call()
+        return  res.render("govDashboard",{isValid:true,userRole:req.session.userRole,allSchemes:allSchemes })
+    })
+    .catch((error)=> {
+        console.log('Add scheme error', error.message);
+        req.flash('error', 'Cannot add sheme')
+        return  res.render("govDashboard",{isValid:true,userRole:req.session.userRole })
+    })
+}
 
 module.exports = {
     index: async (req, res) => {
@@ -10,24 +27,19 @@ module.exports = {
             console.log(e.message);
             req.flash('error', "Cannot connect to network")
         })
+        const result = await module.exports.allSchemes(req, res)
+        res.render('index',{ allSchemes: result})
+        
+    },
+    allSchemes : async (req, res)=> {
         try {
             const allSchemes =  await connection.initContract().methods.allSchemes().call();
-            return res.render('index', {allSchemes: allSchemes})
+            return allSchemes;
         } catch(error) {
             console.log(error.message);
             req.flash('error', "Something went wrong!!")
-            return res.render('index')
+            return error.message;
         }
-
-        // allSchemes
-        //     .then((r) => {
-        //         return res.render('index', {allSchemes: r})
-        //     })
-        //     .catch((error) => {
-        //         req.flash('error',`  something went wrong, please try later`)
-        //         console.log(error.message);
-        //         return res.render('index')
-        //     });
     },
     getAScheme: async (req, res) => {
         connection.initWeb3().catch(e=> {
@@ -48,9 +60,7 @@ module.exports = {
         try {
             const scheme = await connection.initContract().methods.addScheme(name, date, description,cost).send({from: sender, gas:3000000})
             console.log(scheme);
-            const allSchemes = await connection.initContract().methods.allSchemes().call()
-            return  res.render("govDashboard",{isValid:true,userRole:req.session.userRole,allSchemes:allSchemes })
-
+            transaction(req, res, scheme)
         } catch(error) {
             req.flash('error', 'Something wents wrong')
             console.log(error.message);
@@ -130,5 +140,9 @@ module.exports = {
             req.flash('error', 'Updating scheme fails due to errors')
             return  res.render("userDashboard",{isValid:true,userRole:req.session.userRole})
         }
+    },
+    transactions : async (req, res) => {
+        const allTransactions = await Transaction.find()
+        res.render('Transactions', {allTransactions : allTransactions})
     }
 };
