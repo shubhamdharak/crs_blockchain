@@ -1,0 +1,56 @@
+<%if (messages.success) { %>
+<script>
+  toastAlert("Success", "<%= messages.success %>", "alert-success");
+</script>
+<% } %> <%if (messages.error) { %>
+<script>
+  toastAlert("Error", "<%= messages.error %>", "alert-danger");
+</script>
+<% } %>
+
+<div class="container">
+  <h2 class="text-center font-weight-bold">Welcome to Transaction Manager</h2>
+
+  <% if (typeof allTransactions !='object' ) { %>
+    <h3 class="text-center font-weight-medium">No Transaction records exits</h3>
+    <% } else {  %>
+    
+  <div class="dataTable text-center">
+    <!-- Responsive table -->
+    <div class="w-1100 mw-full">
+      <!-- w-400 = width: 40rem (400px), mw-full = max-width: 100% -->
+      <div class="card p-0 bg-very-dark-dm">
+        <!-- p-0 = padding: 0, bg-very-dark-dm = background-color: var(--dark-color-dark) only in dark mode -->
+        <div class="table-responsive m-10" >
+          <table class="table table-inner-bordered stripe" id="myTable">
+            <thead>
+              <tr>
+                <th>#S.No</th>
+                <th>Transaction Hash</th>
+                <th>Date & Time</th>
+              </tr>
+            </thead>
+            <tbody>
+                <% allTransactions.forEach((transaction, index)=> { %>
+              <tr>
+                <th><%= index+1 %></th>
+                <td><a href=""><%= transaction.transactionHash %></a></td>
+                <td><%= transaction.createdAt %></td>
+              </tr>
+                <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+        
+
+  <% } %>
+</div>
+
+<script>
+    $(document).ready( function () {
+    $('#myTable').DataTable();
+} );
+</script>
