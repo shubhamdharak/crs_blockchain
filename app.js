@@ -69,6 +69,7 @@ app.get("/Dashboard", dashboardController.dashboard);
 app.get("/logout", loginController.logout);
 
 app.get('/transactions', operations.transactions)
+app.get('/getTransaction/:hash', operations.getTransaction)
 
 // Action Handlers for schemes
 app.get('/getAScheme/:id', operations.getAScheme)

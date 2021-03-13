@@ -2,7 +2,7 @@ const { default: Web3 } = require("web3");
 const connection = require("../connection");
 const Transaction = require('../models/TransactionModel')
 
-let sender =  '0xE3E314b91eC3D6A9bFC8c3d1899B811289583EC3'
+let sender =  '0xDAE09a20f7FE978Ee3607e0e1Edda7733f937544'
 
 async function transaction(req, res, scheme) {
     const data = await new Transaction({
@@ -144,5 +144,11 @@ module.exports = {
     transactions : async (req, res) => {
         const allTransactions = await Transaction.find()
         res.render('Transactions', {allTransactions : allTransactions})
+    },
+    getTransaction: async (req, res)=> {
+        const hash = req.params.hash
+        const data = await global.web3.eth.getTransaction(hash)
+        .catch((error=> console.log(error.message)))
+        return res.status(200).json({data: data})
     }
 };

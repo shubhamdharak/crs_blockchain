@@ -22,7 +22,7 @@
       <div class="card p-0 bg-very-dark-dm">
         <!-- p-0 = padding: 0, bg-very-dark-dm = background-color: var(--dark-color-dark) only in dark mode -->
         <div class="table-responsive m-10" >
-          <table class="table table-inner-bordered stripe" id="myTable">
+          <table class="table table-inner-bordered stripe " id="myTable">
             <thead>
               <tr>
                 <th>#S.No</th>
@@ -34,7 +34,7 @@
                 <% allTransactions.forEach((transaction, index)=> { %>
               <tr>
                 <th><%= index+1 %></th>
-                <td><a href=""><%= transaction.transactionHash %></a></td>
+                <td><a onclick="getTransaction('<%= transaction.transactionHash %>')"><%= transaction.transactionHash %></a></td>
                 <td><%= transaction.createdAt %></td>
               </tr>
                 <% }) %>
@@ -44,13 +44,54 @@
       </div>
     </div>
   </div>
-        
-
   <% } %>
 </div>
+
+<div class="modal ie-scroll-fix" id="modal-1" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content w-full">
+        <a href="#" class="close" role="button" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </a>
+        <h2 class="modal-title text-center font-weight-semi-bold">Transaction Details</h1>
+        <div>
+          <div class="d-flex flex-row">
+            <h4 class="font-weight-semi-bold">Hash : </h4>
+            <h4 id="hash" ></h4>
+          </div>
+          <div class="d-flex flex-row">
+            <h4 class="font-weight-semi-bold">Block Number : </h4>
+            <h4 id="block"></h4>
+          </div>
+          <div class="d-flex flex-row">
+            <h4 class="font-weight-semi-bold">From :</h4>
+            <h4 id="from"></h4>
+          </div>
+          <div class="d-flex flex-row">
+            <h4 class="font-weight-semi-bold">To : </h4>
+            <h4 id="to"></h4>
+          </div>
+        </div>
+        <div class="text-right mt-20"> <!-- text-right = text-align: right, mt-20 = margin-top: 2rem (20px) -->
+          <a href="#" class="btn mr-5" role="button">Close</a>
+        </div>
+      </div>
+    </div>
+  </div>
 
 <script>
     $(document).ready( function () {
     $('#myTable').DataTable();
 } );
+
+function getTransaction(hash) {
+    $.get(`/getTransaction/${hash}`,(data, status)=> {
+        halfmoon.toggleModal('modal-1');
+        console.log(data.data);
+        $('#hash').html(data.data.hash)
+        $('#block').html(data.data.blockNumber)
+        $('#from').html(data.data.from)
+        $('#to').html(data.data.to)
+    })
+}
 </script>
