@@ -4,21 +4,22 @@ const Transaction = require('../models/TransactionModel')
 
 let sender =  '0xDAE09a20f7FE978Ee3607e0e1Edda7733f937544'
 
+//  Saves transaction history to database for retriving purpose
 async function transaction(req, res, scheme) {
     const data = await new Transaction({
         transactionHash : scheme.transactionHash,
         blockNumber : scheme.blockNumber
     })
     .save()
-    .then( async ()=> {
-        const allSchemes = await connection.initContract().methods.allSchemes().call()
-        return  res.render("govDashboard",{isValid:true,userRole:req.session.userRole,allSchemes:allSchemes })
-    })
+    // .then( async ()=> {
+        
+        // })
     .catch((error)=> {
         console.log('Add scheme error', error.message);
         req.flash('error', 'Cannot add sheme')
         return  res.render("govDashboard",{isValid:true,userRole:req.session.userRole })
     })
+    return true
 }
 
 module.exports = {
@@ -61,6 +62,8 @@ module.exports = {
             const scheme = await connection.initContract().methods.addScheme(name, date, description,cost).send({from: sender, gas:3000000})
             console.log(scheme);
             transaction(req, res, scheme)
+            const allSchemes = await connection.initContract().methods.allSchemes().call()
+            return  res.render("govDashboard",{isValid:true,userRole:req.session.userRole,allSchemes:allSchemes })
         } catch(error) {
             req.flash('error', 'Something wents wrong')
             console.log(error.message);
@@ -71,6 +74,7 @@ module.exports = {
         const scheme_id  = parseInt(req.params.id)
         try {
             const result = await connection.initContract().methods.removeScheme(scheme_id).send({from : sender})
+            transaction(req, res, result)
             res.status(200).json({success: "Deleted"})
 
         } catch (error) {
@@ -83,6 +87,7 @@ module.exports = {
         const {scheme_id, name, cost, description, date} = req.body
         try {
             const result = await connection.initContract().methods.updateScheme(scheme_id, name, description, date,cost).send({from: sender})
+            transaction(req, res, result)
             const allSchemes = await connection.initContract().methods.allSchemes().call()
             return  res.render("govDashboard",{isValid:true,userRole:req.session.userRole, allSchemes:allSchemes})
 
@@ -107,6 +112,7 @@ module.exports = {
         try {
             const material = await connection.initContract().methods.addMaterial(name, sender,cost).send({from: sender, gas:3000000})
             console.log(material);
+            transaction(req, res, material)
             const allMaterials = await connection.initContract().methods.allMaterials().call()
             return  res.render("userDashboard",{isValid:true,userRole:req.session.userRole,allMaterials:allMaterials })
 
@@ -120,6 +126,7 @@ module.exports = {
         const material_id  = parseInt(req.params.id)
         try {
             const result = await connection.initContract().methods.removeMaterial(material_id).send({from : sender})
+            transaction(req, res, result)
             res.status(200).json({success: "Deleted"})
 
         } catch (error) {
@@ -132,6 +139,7 @@ module.exports = {
         const {Material_id, name, cost} = req.body
         try {
             const result = await connection.initContract().methods.updateMaterial(Material_id,name,sender,cost).send({from: sender})
+            transaction(req, res, result)
             const allMaterials = await connection.initContract().methods.allMaterials().call()
             return  res.render("userDashboard",{isValid:true,userRole:req.session.userRole, allMaterials:allMaterials})
 
