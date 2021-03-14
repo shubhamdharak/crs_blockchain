@@ -27,6 +27,9 @@ module.exports ={
                 const allMaterials = await connection.initContract().methods.allMaterials().call()
                 res.render("userDashboard",{isValid:true,userRole:req.session.userRole,allMaterials:allMaterials})
             }
+            else if(req.session.userRole === "contractor"){
+                res.render("contractorDash",{isValid:true,userRole:req.session.userRole})
+            }
         }
         else{
             req.flash('error', "Invalid Session")

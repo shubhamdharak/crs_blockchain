@@ -2,7 +2,7 @@ const { default: Web3 } = require("web3");
 const connection = require("../connection");
 const Transaction = require('../models/TransactionModel')
 
-let sender =  '0xDAE09a20f7FE978Ee3607e0e1Edda7733f937544'
+let sender =  '0x5209BFaf0AE1bF5dEEdF6e49ce4897d5A88377Ac'
 
 //  Saves transaction history to database for retriving purpose
 async function transaction(req, res, scheme) {
@@ -11,9 +11,7 @@ async function transaction(req, res, scheme) {
         blockNumber : scheme.blockNumber
     })
     .save()
-    // .then( async ()=> {
-        
-        // })
+
     .catch((error)=> {
         console.log('Add scheme error', error.message);
         req.flash('error', 'Cannot add sheme')

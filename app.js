@@ -72,6 +72,7 @@ app.get('/transactions', operations.transactions)
 app.get('/getTransaction/:hash', operations.getTransaction)
 
 // Action Handlers for schemes
+app.get('/allSchemes', operations.allSchemes)
 app.get('/getAScheme/:id', operations.getAScheme)
 app.post('/addScheme', operations.addScheme)
 app.get('/deleteScheme/:id', operations.deleteScheme)

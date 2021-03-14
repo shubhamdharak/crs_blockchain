@@ -1,0 +1,61 @@
+<%if (messages.success) { %>
+<script>
+  toastAlert("Success", "<%= messages.success %>", "alert-success");
+</script>
+<% } %> <%if (messages.error) { %>
+<script>
+  toastAlert("Error", "<%= messages.error %>", "alert-danger");
+</script>
+<% } %>
+
+<!-- Side Navagation Bar -->
+<div class="sidebar" style="z-index: 0;">
+  <div class="sidebar-menu">
+      <h5 class="sidebar-title" style="margin-top: 70px;">General</h5>
+      <div class="sidebar-divider"></div>
+      <a href="#" class="sidebar-link sidebar-link-with-icon">
+          <span class="sidebar-icon bg-transparent justify-content-start mr-0">
+              <!-- bg-transparent = background-color: transparent, justify-content-start = justify-content: flex-start, mr-0 = margin-right: 0 -->
+              <i class="fa fa-calculator" aria-hidden="true"></i>
+          </span>
+          My Contracts
+      </a>
+      <a href="#" class="sidebar-link sidebar-link-with-icon">
+          <span class="sidebar-icon bg-transparent justify-content-start mr-0">
+              <!-- bg-transparent = background-color: transparent, justify-content-start = justify-content: flex-start, mr-0 = margin-right: 0 -->
+              <i class="fa fa-newspaper-o" aria-hidden="true"></i>
+          </span>
+          Notifications
+      </a>
+      <br />
+      <h5 class="sidebar-title">Activity</h5>
+      <div class="sidebar-divider"></div>
+      <a onclick="allSchemes()" class="sidebar-link sidebar-link-with-icon">
+          <span class="sidebar-icon bg-primary text-white rounded-circle">
+              <!-- bg-primary = background-color: var(--primary-color), text-white = color: white, rounded-circle = border-radius: 50% -->
+              <i class="fa fa-file-word-o" aria-hidden="true"></i>
+          </span>
+          Bid to New Scheme
+      </a>
+      <a href="/transactions" class="sidebar-link sidebar-link-with-icon">
+          <span class="sidebar-icon bg-secondary text-dark rounded-circle">
+              <!-- bg-secondary = background-color: var(--secondary-color), text-dark = color: var(--lm-base-text-color), rounded-circle = border-radius: 50% -->
+              <i class="fa fa-envelope-o" aria-hidden="true"></i>
+          </span>
+          History / Activities
+      </a>
+  </div>
+</div>
+<!-- Side Navagation End -->
+
+
+<h2 class="text-center">Welcome to Contractor's Dashboard</h2>
+
+<script>
+  function allSchemes() {
+    $.get('/allSchemes', (data, status)=> {
+      console.log("click");
+      console.log(data);
+    });
+  }
+</script>
