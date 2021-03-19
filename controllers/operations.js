@@ -2,7 +2,7 @@ const { default: Web3 } = require("web3");
 const connection = require("../connection");
 const Transaction = require('../models/TransactionModel')
 
-let sender =  '0x5209BFaf0AE1bF5dEEdF6e49ce4897d5A88377Ac'
+let sender =  '0x3A8f015Ed11F5A1a0EbC7cB839d0739E01a7E7ee'
 
 //  Saves transaction history to database for retriving purpose
 async function transaction(req, res, scheme) {
@@ -61,6 +61,7 @@ module.exports = {
             console.log(scheme);
             transaction(req, res, scheme)
             const allSchemes = await connection.initContract().methods.allSchemes().call()
+            req.flash("success","Scheme added successfully!")
             return  res.render("govDashboard",{isValid:true,userRole:req.session.userRole,allSchemes:allSchemes })
         } catch(error) {
             req.flash('error', 'Something wents wrong')
@@ -87,6 +88,7 @@ module.exports = {
             const result = await connection.initContract().methods.updateScheme(scheme_id, name, description, date,cost).send({from: sender})
             transaction(req, res, result)
             const allSchemes = await connection.initContract().methods.allSchemes().call()
+            req.flash("success", "Scheme updated!")
             return  res.render("govDashboard",{isValid:true,userRole:req.session.userRole, allSchemes:allSchemes})
 
         } catch (error) {
@@ -112,6 +114,7 @@ module.exports = {
             console.log(material);
             transaction(req, res, material)
             const allMaterials = await connection.initContract().methods.allMaterials().call()
+            req.flash("success", "Materal added successfully")
             return  res.render("userDashboard",{isValid:true,userRole:req.session.userRole,allMaterials:allMaterials })
 
         } catch(error) {
@@ -139,6 +142,7 @@ module.exports = {
             const result = await connection.initContract().methods.updateMaterial(Material_id,name,sender,cost).send({from: sender})
             transaction(req, res, result)
             const allMaterials = await connection.initContract().methods.allMaterials().call()
+            req.flash("success", "Material updated!")
             return  res.render("userDashboard",{isValid:true,userRole:req.session.userRole, allMaterials:allMaterials})
 
         } catch (error) {

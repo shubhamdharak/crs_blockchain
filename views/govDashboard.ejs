@@ -236,6 +236,7 @@
                                                 $.get(`/deleteScheme/${id}`, (data, status) => {
                                                     if (status === 'success') {
                                                         $(`#${id}`).remove()
+                                                        toastAlert('Success',"Scheme Deleted Successfully","alert-success");
                                                     }
                                                 });
                                             }

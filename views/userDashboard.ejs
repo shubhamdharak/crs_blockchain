@@ -194,7 +194,8 @@
                                             if (response) {
                                                 $.get(`/deleteMaterial/${id}`, (data, status) => {
                                                     if (status === 'success') {
-                                                        $(`#${id}`).remove()
+                                                        $(`#${id}`).remove();
+                                                        toastAlert("Success", "Material deleted!","alert-success");
                                                     }
                                                 });
                                             }
