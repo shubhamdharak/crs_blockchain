@@ -31,6 +31,29 @@
     </div>
 </Section>
 
+ <!-- Modal for bidding  -->
+<div class="modal" id="modal-4" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <a href="#" class="btn close" role="button" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </a>
+            <h5 class="modal-title">Make New Bid</h5>
+
+                <input type="hidden" id="contract_id" name="contract_id">
+                <div class="form-group">
+                    <label for="bidAmount" class="required">Bid amount</label>
+                    <input type="number" id="bidAmount" name="bidAmount" class="form-control"
+                        placeholder="Bid Amount" required="required">
+                </div>
+                
+                <input onClick="makeBid()" class="btn btn-secondary btn-block" type="submit" value="Submit Bid" data-dismiss="modal">
+
+        </div>
+    </div>
+</div>
+
+ <!-- Modal for getting scheme detalis  -->
 <div class="modal modal-full ie-scroll-fix" id="modal-5" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -53,7 +76,7 @@
                     <h4 id="scheme_cost"></h4>
                 </div>
                     <p id="scheme_desc" class="font-size-20"></p>
-                <button class="btn btn-success">Make a Bid</button>
+                <button onClick="openModal()" class="btn btn-success" >Make a Bid</button>
             </div>
           </div>
         </div>
@@ -65,6 +88,7 @@
 <div>
     <div class="container-fluid">
         <div class="row row-eq-spacing-lg">
+            <h3>  Latest Schemes and Projects </h3>
             <div class="col-lg-9">
                 <% if ( typeof allSchemes != 'object' ) { %>
                     <div class="card">
@@ -274,6 +298,33 @@
             $('#scheme_desc').html(data[2])
             $('#scheme_date').html(data[3])
             $('#scheme_cost').html(data[5])
+
+            $("#contract_id").val(data[0])
         })
     }
+
+    function openModal() {
+        $('#modal-5').hide()
+        halfmoon.toggleModal('modal-4');
+    }
+
+    function makeBid() {
+        const contract_id = $("#contract_id").val();
+        const bidAmount = $("#bidAmount").val();
+
+        $.ajax({
+            type: "POST",
+            url: "/makeBid",
+            data : { contract_id, bidAmount },
+            success: function (response) {
+                // $('#modal-4').hide();
+                toastAlert("Success", response, "alert-success");
+            },
+            error: function(xhr) {
+                toastAlert("Error", xhr.responseText, "alert-danger");
+                // $('#modal-4').hide();
+            }
+        }) 
+    }
+    
 </script>

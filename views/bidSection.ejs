@@ -133,7 +133,7 @@
                 <!-- Dashboard Content -->
                 <h3 class="ml-10">Latest Contract and Schemes </h3>
 
-                <% if (typeof allSchemes !='object' ) { %>
+                <% if (typeof allBids !='object' ) { %>
                     <div class="card">
 
                         <div class="row">
@@ -185,35 +185,34 @@
                     <% } else { %>
 
                     </div>
-                        <% allSchemes.forEach((scheme)=> { %>
-                            <% if(scheme.id !=0) { %>
-                                <div class="card shadow-lg border rounded" id="<%= scheme.id %>">
+                        <% allBids.forEach((bid)=> { %>
+                            <% if(bid.id !=0) { %>
+                                <div class="card shadow-lg border rounded" id="<%= bid.id %>">
                                     <div class="row">
                                         <div class="col-10">
                                             <h2 class="card-title">
-                                                <%= scheme.name.toUpperCase() %>
+                                                <%= bid.contractor %>
                                                     <span class="badge badge-danger">New</span>
                                             </h2>
 
                                             <div class="font-size-16">
-                                                <%= scheme.description.substring(0,350) %> ....
+                                                <%= bid.bidAmount %> ....
                                             </div>
-                                            <div>Date of Published : <%= scheme.date %>
+                                            <div>Date of Published : <%= bid.createdAt %>
                                             </div>
-                                            <div>Budget Estimation : <%= scheme.cost %>
-                                            </div>
+                            
                                         </div>
                                         <div class="col-2">
-                                            <button class="btn btn-success btn-md" id="<%= scheme.id %>"
-                                                onClick="deleteScheme('<%= scheme.id %>')" style="margin:10px;"
-                                                type="button">Delete Scheme</button>
+                                            <button class="btn btn-success btn-md" id="<%= bid.id %>"
+                                                onClick="deletebid('<%= bid.id %>')" style="margin:10px;"
+                                                type="button">Delete bid</button>
                                             <div class="dropdown  with-arrow">
                                                 <button class="btn btn-secondary btn-md" data-toggle="dropdown" type="button" id="..." aria-haspopup="true" aria-expanded="false" style="margin:10px;">
                                                     Action <i class="fa fa-angle-down ml-5" aria-hidden="true"></i> <!-- ml-5 = margin-left: 0.5rem (5px) -->
                                                 </button>
                                                 <div class="dropdown-menu" aria-labelledby="...">
-                                                    <button  class="btn btn-primary btn-sm" id="<%= scheme.id %>"
-                                                        onclick="Updatevalue('<%= scheme.id %>')" style="margin:10px;"
+                                                    <button  class="btn btn-primary btn-sm" id="<%= bid.id %>"
+                                                        onclick="Updatevalue('<%= bid.id %>')" style="margin:10px;"
                                                         type="button">Update Scheme</button>
                                                 </div>
                                             </div>

@@ -6,6 +6,7 @@ require("dotenv").config();
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const flash = require("express-flash");
+const cors = require('cors');
 const app = express();
 
 // ----------------- Middelware Manager ---------------------
@@ -18,6 +19,9 @@ app.use(
     saveUninitialized: false,
   })
 );
+
+// CORES
+app.use(cors());
 
 app.use(function (req, res, next) {
   res.locals.currentUser = req.session.userName;
@@ -64,6 +68,7 @@ app.post("/reset", rpass.setNewPwd);
 
 // Dashboard Handlers
 app.get("/Dashboard", dashboardController.dashboard);
+app.get("/Dashboard/bid", dashboardController.bidSection);
 
 // Logout Handlers
 app.get("/logout", loginController.logout);
@@ -83,6 +88,9 @@ app.get('/getAMaterial/:id', operations.getAMaterial)
 app.post('/addMaterial', operations.addMaterial)
 app.get('/deleteMaterial/:id', operations.deleteMaterial)
 app.post('/updateMaterial', operations.updateMaterial)
+
+//  Handlers for Bid 
+app.post('/makeBid', operations.makeBid)
 
 // ContactUs Handlers
 app.get("/contact", contactUs.getPage);

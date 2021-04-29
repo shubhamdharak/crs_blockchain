@@ -2,7 +2,7 @@ const { default: Web3 } = require("web3");
 const connection = require("../connection");
 const Transaction = require('../models/TransactionModel')
 
-let sender =  '0x3A8f015Ed11F5A1a0EbC7cB839d0739E01a7E7ee'
+let sender =  '0x1b1E4c98689d09F3beD6C84f4EfCC0F1747462cC'
 
 //  Saves transaction history to database for retriving purpose
 async function transaction(req, res, scheme) {
@@ -160,5 +160,28 @@ module.exports = {
         const data = await global.web3.eth.getTransaction(hash)
         .catch((error=> console.log(error.message)))
         return res.status(200).json({data: data})
+    },
+    makeBid : async (req, res)=> {
+        const { contract_id, bidAmount } = req.body
+        console.log(contract_id);
+        if(req.session.userRole === "contractor") {
+            try {
+                const bid = await connection.initContract().methods.bidContract(sender, contract_id, bidAmount).send({from: sender, gas: 3000000});
+                console.log(bid);
+                if(Object.keys(bid.events).length === 0) {
+                    return res.status(400).json("Cannot add bid (Bid amount exceeded)")
+                }
+                return res.status(200).json("Bid added successful!")
+            } catch(err) {
+                console.log(err.message);
+                return res.status(400).json("Cannot add bid ");
+            }
+        } else {
+            return res.status(401).json("Access Denied!")
+        }
+    },
+    getAllBids: async ()=> {
+        const allBids = await connection.initContract().methods.getAllBids().call();
+        return allBids;
     }
 };

@@ -1,4 +1,4 @@
-const { default: Web3 } = require('web3')
+const operations = require('../controllers/operations');
 const connection = require('../connection')
 
 
@@ -28,7 +28,8 @@ module.exports ={
                 res.render("userDashboard",{isValid:true,userRole:req.session.userRole,allMaterials:allMaterials})
             }
             else if(req.session.userRole === "contractor"){
-                res.render("contractorDash",{isValid:true,userRole:req.session.userRole})
+                const allSchemes = await connection.initContract().methods.allSchemes().call()
+                res.render("contractorDash",{isValid:true,userRole:req.session.userRole, allSchemes: allSchemes})
             }
         }
         else{
@@ -36,4 +37,8 @@ module.exports ={
             res.redirect("logout")
         }
     },
+    bidSection: async (req, res)=> {
+        const allBids = await operations.getAllBids();
+        res.render('bidSection.ejs', {allBids: allBids});
+    }
 }

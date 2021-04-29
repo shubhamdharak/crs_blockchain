@@ -206,32 +206,29 @@ contract userContract {
         uint bidAmount,
         uint256 createdAt
     );
-    mapping(address => Bid) public bids;
+    mapping(uint256 => Bid) public bids;
     uint bidCount=0;
     
     function bidContract(address _contractor, uint  _contractId, uint _bidAmount) public returns(string memory) {
         require(_contractor != address(0), "Address should not be null");
         require(_contractId > 0, "Id should not be null");
         require(_bidAmount > 0, "Amount should not be null or 0");
-        uint _accountId=0;
-        // Checking account exits or not
-        for(uint i=0; i<= userCount; i++) {
-            if(_contractor == accounts[i].addr) {
-                _accountId = i;
-            } 
-        }
-        if(_accountId !=0) {
+        // // Checking account exits or not
+        // for(uint i=0; i<= userCount; i++) {
+        //     if(_contractor == accounts[i].addr) {
+        //         _accountId = i;
+        //     } 
+        // }
+        
             // Adding bid to bids mapping if criteria satisfy
-            if(_contractId == schemes[_contractId].id && schemes[_contractId].isAlloted == false &&  _bidAmount <= schemes[_contractId].cost) {
-                bids[_contractor] = Bid(_contractor, _bidAmount, block.timestamp);
-                bidCount ++;
-                emit AddBid(_contractor, _contractId, _bidAmount, block.timestamp);
-                return "Bid added successful";
-            } else {
-                return "Error: Cannot add bid";
-            }
+        if(_contractId == schemes[_contractId].id && schemes[_contractId].isAlloted == false &&  _bidAmount <= schemes[_contractId].cost) {
+            bidCount++;
+            bids[bidCount] = Bid(_contractor, _bidAmount, block.timestamp);
+            emit AddBid(_contractor, _contractId, _bidAmount, block.timestamp);
+            return "Bid added successful";
+        } else {
+            return "Error: Cannot add bid";
         }
-        return "Error: Account does not exists";
         
     }
     
@@ -242,16 +239,18 @@ contract userContract {
 
     }
     
-    // function getAllBids() public returns(Bid[] memory) {
-    //     a[] memory allAddress = new Bid[](bidCount);
-    //     for(uint i=0; i< bidCount; i++) {
-    //         allBids[i] = bids[0x5B38Da6a701c568545dCfcB03FcB875f56beddC4];
-    //     }
-    //     return allBids;
-    // }
+    function getAllBids() view public returns(Bid[] memory) {
+        Bid[] memory allBids = new Bid[](bidCount);
+        for(uint i=0; i< bidCount; i++) {
+            allBids[i] = bids[i+1];
+        }
+        return allBids;
+    }
     
-    // function getABid(address _contractor) public {
-    //     require(_contractor != address(0), "Address should not be null");
-        
-    // }
+    function getABid(uint256 _contractId) view public  returns (Bid memory) {
+        require(_contractId != 0, "Id should not be null");
+        if(_contractId == schemes[_contractId].id ) {
+            return bids[_contractId];
+        }
+    }
 }
