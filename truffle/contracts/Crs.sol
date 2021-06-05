@@ -195,9 +195,12 @@ contract userContract {
     // Operation for contractor
     
     struct Bid {
+        uint256 bidId;
+        string name_of_contractor;
         address contractor;
         uint256 bidAmount;
         uint256 createdAt;
+        uint256 contract_id;
     }
     
     event AddBid(
@@ -209,7 +212,7 @@ contract userContract {
     mapping(uint256 => Bid) public bids;
     uint bidCount=0;
     
-    function bidContract(address _contractor, uint  _contractId, uint _bidAmount) public returns(string memory) {
+    function bidContract(address _contractor, uint  _contractId, uint _bidAmount, string memory _name_of_contractor) public returns(string memory) {
         require(_contractor != address(0), "Address should not be null");
         require(_contractId > 0, "Id should not be null");
         require(_bidAmount > 0, "Amount should not be null or 0");
@@ -223,7 +226,7 @@ contract userContract {
             // Adding bid to bids mapping if criteria satisfy
         if(_contractId == schemes[_contractId].id && schemes[_contractId].isAlloted == false &&  _bidAmount <= schemes[_contractId].cost) {
             bidCount++;
-            bids[bidCount] = Bid(_contractor, _bidAmount, block.timestamp);
+            bids[bidCount] = Bid(bidCount, _name_of_contractor, _contractor, _bidAmount, block.timestamp, _contractId);
             emit AddBid(_contractor, _contractId, _bidAmount, block.timestamp);
             return "Bid added successful";
         } else {
@@ -232,10 +235,16 @@ contract userContract {
         
     }
     
-    function allocateContract(uint _id, address _contractor ) public {
-        // check if scheme is due or not 
-        // if due then calculate lowest bidder
-        // if approve by the gov. member then allocate
+    function allocateContract(uint _id, address _contractor, uint256 _bidId ) public returns (bool) {
+        require(_id >0, 'Invalid id');
+        require(address(_contractor) != address(0), "Invalid address");
+        if(_id == schemes[_id].id && schemes[_id].isAlloted == false && bids[_bidId].bidId == _bidId) {
+            Scheme storage scheme = schemes[_id];
+            scheme.isAlloted = true;
+            scheme.contractor = _contractor;
+            return true;
+        }
+        return false;
 
     }
     
