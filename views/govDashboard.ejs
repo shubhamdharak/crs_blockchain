@@ -185,22 +185,28 @@
                     <% } else { %>
 
                     </div>
+
                         <% allSchemes.forEach((scheme)=> { %>
-                            <% if(scheme.id !=0) { %>
+                            <% if(scheme.id !=0 && scheme.isAlloted == true  ) { %>
                                 <div class="card shadow-lg border rounded" id="<%= scheme.id %>">
                                     <div class="row">
                                         <div class="col-10">
                                             <h2 class="card-title">
                                                 <%= scheme.name.toUpperCase() %>
                                                     <span class="badge badge-danger">New</span>
+                                                    <span class="badge badge-success">Allocated</span>
                                             </h2>
+
+                                            <div class="font-size-16">
+                                                Contractor Address : <%= scheme.contractor %>
+                                            </div>
 
                                             <div class="font-size-16">
                                                 <%= scheme.description.substring(0,350) %> ....
                                             </div>
-                                            <div>Date of Published : <%= scheme.date %>
+                                            <div>Date of End (Biding) : <%= scheme.date %>
                                             </div>
-                                            <div>Budget Estimation : <%= scheme.cost %>
+                                            <div>Budget Estimation : <%= scheme.cost %> Rs
                                             </div>
                                         </div>
                                         <div class="col-2">
@@ -220,6 +226,42 @@
                                     </div>
                                     </div>
                                 </div>
+                                <hr>
+                                    <% } else if(scheme.id !=0 && scheme.isAlloted == false  ) { %>
+
+                                        <div class="card shadow-lg border rounded" id="<%= scheme.id %>">
+                                            <div class="row">
+                                                <div class="col-10">
+                                                    <h2 class="card-title">
+                                                        <%= scheme.name.toUpperCase() %>
+                                                            <span class="badge badge-danger">New</span>
+                                                    </h2>
+        
+                                                    <div class="font-size-16">
+                                                        <%= scheme.description.substring(0,350) %> ....
+                                                    </div>
+                                                    <div>Date of End (Biding) : <%= scheme.date %>
+                                                    </div>
+                                                    <div>Budget Estimation : <%= scheme.cost %> Rs
+                                                    </div>
+                                                </div>
+                                                <div class="col-2">
+                                                    <button class="btn btn-success btn-md" id="<%= scheme.id %>"
+                                                        onClick="deleteScheme('<%= scheme.id %>')" style="margin:10px;"
+                                                        type="button">Delete Scheme</button>
+                                                    <div class="dropdown  with-arrow">
+                                                        <button class="btn btn-secondary btn-md" data-toggle="dropdown" type="button" id="..." aria-haspopup="true" aria-expanded="false" style="margin:10px;">
+                                                            Action <i class="fa fa-angle-down ml-5" aria-hidden="true"></i> <!-- ml-5 = margin-left: 0.5rem (5px) -->
+                                                        </button>
+                                                        <div class="dropdown-menu" aria-labelledby="...">
+                                                            <button  class="btn btn-primary btn-sm" id="<%= scheme.id %>"
+                                                                onclick="Updatevalue('<%= scheme.id %>')" style="margin:10px;"
+                                                                type="button">Update Scheme</button>
+                                                        </div>
+                                                    </div>
+                                            </div>
+                                            </div>
+                                        </div>
                                     <% } %>
                                         <% }) %>
                 

@@ -3,6 +3,7 @@
     <% } %>
         <%if (messages.error) { %>
             <script>toastAlert("Error", "<%= messages.error %>", "alert-danger");</script>
+            
             <% } %>
                 <!-- Side Navagation Bar -->
                 <div class="sidebar" style="z-index: 0;">
@@ -94,41 +95,25 @@
                     </div>
                 </div>
 
-                <!-- Modal for updating a scheme -->
-                <div class="modal" id="modal-3" tabindex="-1" role="dialog">
+                <!-- modal for approval -->
+                <div class="modal" id="modal-6" tabindex="-1" role="dialog">
                     <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <a href="#" class="btn close" role="button" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </a>
-                            <h5 class="modal-title">Update Scheme</h5>
-                            <form action="/updateScheme" method="post">
-                                <input type="hidden" id="scheme_id" name="scheme_id">
-                                <div class="form-group">
-                                    <label for="name" class="required">Name</label>
-                                    <input type="text" name="name" id="name" class="form-control"
-                                        placeholder="Scheme Name" required="required">
-                                </div>
-                                <div class="form-group">
-                                    <label for="cost" class="required">Cost</label>
-                                    <input type="text" id="cost" name="cost" class="form-control"
-                                        placeholder="Cost of Scheme" required="required">
-                                </div>
-                                <div class="form-group">
-                                    <label for="desc" class="required">Description</label>
-                                    <textarea class="form-control" name="description" id="description"
-                                        placeholder="Give detailed description about scheme/ project"></textarea>
-                                </div>
-                                <div class="form-group">
-                                    <label for="date" class="required">Date</label>
-                                    <input type="date" id="date" name="date" class="form-control" placeholder="Date"
-                                        required="required">
-                                </div>
-                                <input class="btn btn-secondary btn-block" type="submit" value="Update Scheme">
-                            </form>
+                      <div class="modal-content">
+                        <button class="close" data-dismiss="modal" type="button" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h5 class="modal-title">confirmation To Approve</h5>
+                        <p>
+                          Are you sure to approve the contract to this contractor. After confirmation this scheme/ contract is allocated to selected person.
+                        </p>
+                        <div class="text-right mt-20"> <!-- text-right = text-align: right, mt-20 = margin-top: 2rem (20px) -->
+                          <button class="btn mr-5" data-dismiss="modal" type="button">cancel</button>
+                          <button class="btn btn-primary" data-dismiss="modal" id="cnfrm" type="button" value="true">confirm</button>
                         </div>
+                      </div>
                     </div>
-                </div>
+                  </div>
+
 
                 <!-- Dashboard Content -->
                 <h3 class="ml-10">Latest Contract and Schemes </h3>
@@ -190,19 +175,24 @@
                                 <div class="card shadow-lg border rounded" id="<%= bid.id %>">
                                     <div class="row">
                                         <div class="col-10">
-                                            <h2 class="card-title">
-                                                <%= bid.contractor %>
-                                                    <span class="badge badge-danger">New</span>
+                                            <h2 class="card-title d-flex">
+                                               Name of Contractor: <%= bid.name_of_contractor %>
                                             </h2>
-
-                                            <div class="font-size-16">
-                                                <%= bid.bidAmount %> ....
+                                            <div>
+                                                <h5>
+                                                    <h5 id="contractId" style="display:none"><%= bid.contract_id %></h5>
+                                                    Contract Name : <span id="cname"></span>
+                                                </h5>
                                             </div>
-                                            <div>Date of Published : <%= bid.createdAt %>
+                                            <div class="font-size-16">
+                                               Bid Amount:  <%= bid.bidAmount %> (Rs)
+                                            </div>
+                                            <div>Date of Bid : <%= new Date(bid.createdAt *100) %>
                                             </div>
                             
                                         </div>
                                         <div class="col-2">
+
                                             <button class="btn btn-success btn-md" id="<%= bid.id %>"
                                                 onClick="deletebid('<%= bid.id %>')" style="margin:10px;"
                                                 type="button">Delete bid</button>
@@ -212,8 +202,8 @@
                                                 </button>
                                                 <div class="dropdown-menu" aria-labelledby="...">
                                                     <button  class="btn btn-primary btn-sm" id="<%= bid.id %>"
-                                                        onclick="Updatevalue('<%= bid.id %>')" style="margin:10px;"
-                                                        type="button">Update Scheme</button>
+                                                        onclick="approveBid('<%= bid.bidId %>','<%= bid.contract_id %>')" style="margin:10px;"
+                                                        type="button">Approve</button>
                                                 </div>
                                             </div>
                                     </div>
@@ -227,31 +217,29 @@
                                     <!-- Dashboard Content End -->
                                     <script>
                                         // Change user Role
-                                        document.getElementById("userRole").innerHTML = "<%= userRole %>"
+                                        
                                         // Add Sidebar to Page
                                         $("#sidebar").addClass("with-sidebar")
+                                       
 
-                                        function deleteScheme(id) {
-                                            const response = confirm("Are you sure, Once deleted it can not be retrive again")
-                                            if (response) {
-                                                $.get(`/deleteScheme/${id}`, (data, status) => {
-                                                    if (status === 'success') {
-                                                        $(`#${id}`).remove()
-                                                        toastAlert('Success',"Scheme Deleted Successfully","alert-success");
-                                                    }
+
+                                        function approveBid(id, contractId) {
+                                            const bid_id = parseInt(id);
+                                            // const contractId = parseInt(contractId);
+                                                halfmoon.toggleModal('modal-6');
+                                                // const cnfrm = $("#cnfrm").val();                                                
+                                                $('#cnfrm').click(function() {
+                                                    $.ajax({
+                                                        type: "post",
+                                                        url : "/Dashboard/approve",
+                                                        data : { bid_id, contractId },
+                                                        success: function (response) {
+                                                            toastAlert("Success", "Approved", "alert-success");
+                                                        },
+                                                        error: function(xhr) {
+                                                            toastAlert("Error", xhr.responseText, "alert-danger");
+                                                        }
+                                                    });
                                                 });
-                                            }
-                                        }
-
-                                        function Updatevalue(id) {
-                                            const scheme_id = parseInt(id);
-                                            $.get(`/getAScheme/${scheme_id}`, (data, status)=>{
-                                                halfmoon.toggleModal('modal-3');
-                                                $('#modal-3 #scheme_id').val(data[0]);
-                                                $('#modal-3 #name').val(data[1]);
-                                                $('#modal-3 #description').val(data[2]);
-                                                $('#modal-3 #date').val(data[3]);
-                                                $('#modal-3 #cost').val(data[5]);
-                                            })
                                         }
                                     </script>

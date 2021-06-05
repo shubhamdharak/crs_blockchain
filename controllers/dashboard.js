@@ -1,4 +1,3 @@
-const operations = require('../controllers/operations');
 const connection = require('../connection')
 
 
@@ -36,9 +35,6 @@ module.exports ={
             req.flash('error', "Invalid Session")
             res.redirect("logout")
         }
-    },
-    bidSection: async (req, res)=> {
-        const allBids = await operations.getAllBids();
-        res.render('bidSection.ejs', {allBids: allBids});
     }
+    
 }

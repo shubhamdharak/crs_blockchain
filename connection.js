@@ -1,7 +1,7 @@
 const Web3 = require('web3')
 
 let web3;
-contractAddress = '0xeDA2F3400aCF101a256B67176c622990B6008936'
+contractAddress = '0x27Cb0f1a9fd775BF666b151BbB41b601C385741e'
 ABI = [
 	{
 		"anonymous": false,
@@ -176,10 +176,21 @@ ABI = [
 				"internalType": "address",
 				"name": "_contractor",
 				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_bidId",
+				"type": "uint256"
 			}
 		],
 		"name": "allocateContract",
-		"outputs": [],
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
@@ -199,6 +210,11 @@ ABI = [
 				"internalType": "uint256",
 				"name": "_bidAmount",
 				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "_name_of_contractor",
+				"type": "string"
 			}
 		],
 		"name": "bidContract",
@@ -609,6 +625,16 @@ ABI = [
 		"name": "bids",
 		"outputs": [
 			{
+				"internalType": "uint256",
+				"name": "bidId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "name_of_contractor",
+				"type": "string"
+			},
+			{
 				"internalType": "address",
 				"name": "contractor",
 				"type": "address"
@@ -621,6 +647,11 @@ ABI = [
 			{
 				"internalType": "uint256",
 				"name": "createdAt",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "contract_id",
 				"type": "uint256"
 			}
 		],
@@ -659,6 +690,16 @@ ABI = [
 			{
 				"components": [
 					{
+						"internalType": "uint256",
+						"name": "bidId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "name_of_contractor",
+						"type": "string"
+					},
+					{
 						"internalType": "address",
 						"name": "contractor",
 						"type": "address"
@@ -671,6 +712,11 @@ ABI = [
 					{
 						"internalType": "uint256",
 						"name": "createdAt",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "contract_id",
 						"type": "uint256"
 					}
 				],
@@ -689,6 +735,16 @@ ABI = [
 			{
 				"components": [
 					{
+						"internalType": "uint256",
+						"name": "bidId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "name_of_contractor",
+						"type": "string"
+					},
+					{
 						"internalType": "address",
 						"name": "contractor",
 						"type": "address"
@@ -701,6 +757,11 @@ ABI = [
 					{
 						"internalType": "uint256",
 						"name": "createdAt",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "contract_id",
 						"type": "uint256"
 					}
 				],

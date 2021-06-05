@@ -35,7 +35,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(flash());
 app.use(expressLayouts);
-app.use(express.static("public"));
+app.use(express.static(__dirname + "/public"));
 
 // ----------------------- Import Controllers / URL Router --------------------------------
 const regController = require("./controllers/User");
@@ -47,7 +47,8 @@ const userController = require("./controllers/User");
 const authUser = require("./controllers/authUser");
 const mail = require("./controllers/mail");
 const rpass = require("./controllers/resetPassword");
-const operations = require('./controllers/operations')
+const operations = require('./controllers/operations');
+const bidController = require('./controllers/bidController');
 
 // ---------------------------- Use Controllers -----------------------
 // Home Page Handlers
@@ -68,7 +69,8 @@ app.post("/reset", rpass.setNewPwd);
 
 // Dashboard Handlers
 app.get("/Dashboard", dashboardController.dashboard);
-app.get("/Dashboard/bid", dashboardController.bidSection);
+app.get("/Dashboard/bid", bidController.bidSection);
+app.post("/Dashboard/approve", bidController.approveBid);
 
 // Logout Handlers
 app.get("/logout", loginController.logout);
@@ -91,6 +93,7 @@ app.post('/updateMaterial', operations.updateMaterial)
 
 //  Handlers for Bid 
 app.post('/makeBid', operations.makeBid)
+app.get('/Dashboard/getBid/:contract_id', operations.getBid)
 
 // ContactUs Handlers
 app.get("/contact", contactUs.getPage);

@@ -1,8 +1,9 @@
 const { default: Web3 } = require("web3");
 const connection = require("../connection");
-const Transaction = require('../models/TransactionModel')
+const Transaction = require('../models/TransactionModel');
+const {regSchema} = require('../models/scheme')
 
-let sender =  '0x1b1E4c98689d09F3beD6C84f4EfCC0F1747462cC'
+let sender =  '0x5C9bd825c7a197E8B0d0d89f6655765Ca1303e07'
 
 //  Saves transaction history to database for retriving purpose
 async function transaction(req, res, scheme) {
@@ -26,14 +27,14 @@ module.exports = {
             console.log(e.message);
             req.flash('error', "Cannot connect to network")
         })
-        const result = await module.exports.allSchemes(req, res)
-        res.render('index',{ allSchemes: result})
+        const allSchemes = await module.exports.allSchemes(req, res)
+        res.render('index',{ allSchemes: allSchemes})
         
     },
     allSchemes : async (req, res)=> {
         try {
             const allSchemes =  await connection.initContract().methods.allSchemes().call();
-            return allSchemes;
+            return allSchemes
         } catch(error) {
             console.log(error.message);
             req.flash('error', "Something went wrong!!")
@@ -163,10 +164,19 @@ module.exports = {
     },
     makeBid : async (req, res)=> {
         const { contract_id, bidAmount } = req.body
-        console.log(contract_id);
+        const userId = req.session.userId;
+        let user;
+        try {
+            user = await regSchema.findOne({_id: userId});
+        } catch (error) {
+            console.log(error.message);
+            req.flash('error', error.message);
+        }
+        
+        console.log(user.name);
         if(req.session.userRole === "contractor") {
             try {
-                const bid = await connection.initContract().methods.bidContract(sender, contract_id, bidAmount).send({from: sender, gas: 3000000});
+                const bid = await connection.initContract().methods.bidContract(sender, contract_id, bidAmount,user.name).send({from: sender, gas: 3000000});
                 console.log(bid);
                 if(Object.keys(bid.events).length === 0) {
                     return res.status(400).json("Cannot add bid (Bid amount exceeded)")
@@ -183,5 +193,16 @@ module.exports = {
     getAllBids: async ()=> {
         const allBids = await connection.initContract().methods.getAllBids().call();
         return allBids;
+    },
+    approveBid: async (req, res)=> {
+        const { bid_id, contractId} = req.body
+        const result = await connection.initContract().methods.allocateContract(contractId, sender, bid_id).send({from: sender});
+        console.log(result);
+        return true;
+    },
+    getBid: async (req, res)=> {
+        const {contract_id} = req.params
+        const bid = await connection.initContract().methods.getABid(contract_id).call();
+        return res.status(200).json({bid: bid})
     }
 };
