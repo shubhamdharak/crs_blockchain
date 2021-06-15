@@ -114,9 +114,32 @@
                     </div>
                   </div>
 
+            <!-- Modal for Funds  -->
+                <div class="modal" id="modal-7" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <a href="#" class="btn close" role="button" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </a>
+                            <h5 class="modal-title">Distribute the Fund</h5>
+                            <form action="/addFund" method="post">
+                                <div class="form-group">
+                                    <label for="cost" class="required">Amount to Distribute</label>
+                                    <input type="hidden" id="fcontract_id" name="fcontract_id">
+                                    <input type="hidden" id="fbid_id" name="fbid_id">
+                                    <input type="hidden" id="fcontractor_name" name="fcontractor_name">
+                                    <input type="text" id="amount" name="amount" class="form-control"
+                                        placeholder="Amount to relese " required="required">
+                                </div>
+                                
+                                <input class="btn btn-danger btn-block" type="submit" value="Add Funds">
+                            </form>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Dashboard Content -->
-                <h3 class="ml-10">Latest Contract and Schemes </h3>
+                <h3 class="ml-10">Latest bids </h3>
 
                 <% if (typeof allBids !='object' ) { %>
                     <div class="card">
@@ -171,41 +194,48 @@
 
                     </div>
                         <% allBids.forEach((bid)=> { %>
-                            <% if(bid.id !=0) { %>
-                                <div class="card shadow-lg border rounded" id="<%= bid.id %>">
+                            <% if(bid.bid_id !=0 && bid.contractor_name !="") { %>
+                                <div class="card shadow-lg border rounded" id="<%= bid.bid_id %>">
                                     <div class="row">
                                         <div class="col-10">
                                             <h2 class="card-title d-flex">
-                                               Name of Contractor: <%= bid.name_of_contractor %>
+                                            Name of Contractor: <%= bid.contractor_name %>
+                                            <% if(bid.isApprove==true) { %>
+                                                <span class="badge badge-danger"> Allocated </span>
+                                            <% } %>
                                             </h2>
                                             <div>
                                                 <h5>
                                                     <h5 id="contractId" style="display:none"><%= bid.contract_id %></h5>
-                                                    Contract Name : <span id="cname"></span>
+                                                    Contract Name : <%= bid.contract_name %>
                                                 </h5>
                                             </div>
                                             <div class="font-size-16">
-                                               Bid Amount:  <%= bid.bidAmount %> (Rs)
+                                            Bid Amount:  <%= bid.bid_amount %> (Rs)
                                             </div>
-                                            <div>Date of Bid : <%= new Date(bid.createdAt *100) %>
+                                            <div>Date of Bid : <%= bid.createdAt %>
                                             </div>
                             
                                         </div>
                                         <div class="col-2">
 
-                                            <button class="btn btn-success btn-md" id="<%= bid.id %>"
-                                                onClick="deletebid('<%= bid.id %>')" style="margin:10px;"
-                                                type="button">Delete bid</button>
                                             <div class="dropdown  with-arrow">
                                                 <button class="btn btn-secondary btn-md" data-toggle="dropdown" type="button" id="..." aria-haspopup="true" aria-expanded="false" style="margin:10px;">
                                                     Action <i class="fa fa-angle-down ml-5" aria-hidden="true"></i> <!-- ml-5 = margin-left: 0.5rem (5px) -->
                                                 </button>
                                                 <div class="dropdown-menu" aria-labelledby="...">
-                                                    <button  class="btn btn-primary btn-sm" id="<%= bid.id %>"
-                                                        onclick="approveBid('<%= bid.bidId %>','<%= bid.contract_id %>')" style="margin:10px;"
+                                                    <button  class="btn btn-primary btn-sm" id="<%= bid.bid_id %>"
+                                                        onclick="approveBid('<%= bid.bid_id %>','<%= bid.contract_id %>','<%= bid.bid_amount %>' )" style="margin:10px;"
                                                         type="button">Approve</button>
+                                                        <button  class="btn btn-danger btn-md" id="<%= bid.bid_id %>"
+                                                            onclick="deleteBid('<%= bid.bid_id %>' )" style="margin:10px;"
+                                                            type="button">Delete</button>
+                                                        <button onclick="addFunds('<%= bid.bid_id %>','<%= bid.contract_id %>','<%= bid.bid_amount %>','<%= bid.contractor_name %>')" class="btn btn-secondary btn-sm" id="<%= bid.id %>"
+                                                            style="margin:10px;"
+                                                            type="button">Add Funds</button>
                                                 </div>
                                             </div>
+                                            
                                     </div>
                                     </div>
                                 </div>
@@ -216,23 +246,20 @@
                                 <% } %>
                                     <!-- Dashboard Content End -->
                                     <script>
-                                        // Change user Role
+                                        
                                         
                                         // Add Sidebar to Page
-                                        $("#sidebar").addClass("with-sidebar")
-                                       
+                                        $("#sidebar").addClass("with-sidebar");
 
 
-                                        function approveBid(id, contractId) {
+                                        function approveBid(id, contractId, bidAmount) {
                                             const bid_id = parseInt(id);
-                                            // const contractId = parseInt(contractId);
                                                 halfmoon.toggleModal('modal-6');
-                                                // const cnfrm = $("#cnfrm").val();                                                
                                                 $('#cnfrm').click(function() {
                                                     $.ajax({
                                                         type: "post",
                                                         url : "/Dashboard/approve",
-                                                        data : { bid_id, contractId },
+                                                        data : { bid_id, contractId ,bidAmount },
                                                         success: function (response) {
                                                             toastAlert("Success", "Approved", "alert-success");
                                                         },
@@ -241,5 +268,30 @@
                                                         }
                                                     });
                                                 });
+                                        }
+                                        function deleteBid(bidId) {
+                                            halfmoon.toggleModal('modal-6');
+                                            $("#cnfrm").click(function() {
+                                                const bid_id = parseInt(bidId)
+                                                $.get(`/Dashboard/delete/${bid_id}`, function(data) {
+                                                    console.log(data.success)
+                                                    toastAlert("Success", "Deleted", "alert-success");
+                                                    $(`#${bid_Id}`).remove()
+                                                    if(data.success=="Deleted") {
+                                                        toastAlert("Success", "Deleted", "alert-success");
+                                                    }
+                                                    else {
+                                                        toastAlert("Error", "Not Deleted", "alert-danger");
+                                                    }
+                                            });
+                                        })
+                                        }
+
+                                        function addFunds(bid_id, contract_id, amount, contractor_name ) {
+                                            halfmoon.toggleModal('modal-7');
+                                            $('#amount').val(amount);
+                                            $('#fcontract_id').val(contract_id);
+                                            $('#fbid_id').val(bid_id);
+                                            $('#fcontractor_name').val(contractor_name);
                                         }
                                     </script>

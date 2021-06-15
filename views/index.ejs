@@ -69,7 +69,7 @@
                     <span id="scheme_date" class="font-size-16 font-weight-medium mt-10 ml-10"></span>
                 </div>
                 <div >
-                    <img src="dummy.png" alt="" srcset="">
+                    <img src="dummy.png" id="dimage" alt="feature image" srcset="">
                 </div>
                 <div class="font-size-20 d-flex flex-row">
                     <h4>Estimate Cost : </h4>
@@ -179,7 +179,7 @@
                         <!-- Page Content -->
         
                         <%  allSchemes.forEach(function(scheme) { %>
-                            <% if(scheme.id != 0) { %>
+                            <% if(scheme.id != 0 && scheme.name !=" ") { %>
                                 <div class="card">
                                     <h2 class="card-title text-capitalize font-weight-bold">
                                         <%= scheme.name %>
@@ -191,7 +191,7 @@
                                         <h6>Deatils : <span><%= scheme.description %> TODO</span></h6>
                                     </div>
                                     <div class="fake-content">
-                                        <h6>Cost :<span> <%= scheme.cost %> </span></h6>
+                                        <h6>Price Estimation :<span> <%= scheme.cost %> </span> (Rs)</h6>
                                     </div>
                                     <div class="fake-content">
                                         <h6>Status : <span class="badge badge-success">Active</span> </h6> 
@@ -200,7 +200,8 @@
                                     <a href="#modal-5" class="btn btn-primary" role="button" id="<%= scheme.id %>" onclick="getAscheme('<%= scheme.id %>')">View Details</a>
                                     
                                 </div>
-                                <% }  %>
+                                <% }   %>
+
                 <% }) } %>
 
                 <!-- Column end here -->
@@ -217,16 +218,11 @@
                     <div class="marquee" data-duplicated='true' data-direction='up'
                         style="width:220px;overflow-wrap: break-word;">
                         <!-- direction="up" behavior="sliding"  scrollamount="5" onmouseover="this.stop();" onmouseout="this.start();" -->
-                        <a href="#">Notification 1 zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz</a><br>
-                        <a href="#">Notification 1</a><br>
-                        <a href="#">Notification 1</a><br>
-                        <a href="#">Notification 1</a><br>
-                        <a href="#">Notification 1</a><br>
-                        <a href="#">Notification 1</a><br>
-                        <a href="#">Notification 1</a><br>
-                        <a href="#">Notification 1</a><br>
-                        <a href="#">Notification 1</a><br>
-                        <a href="#">Notification 1</a><br>
+                        <% allNoty.forEach((noty)=> { %>
+                            <% if(noty.name != " ") { %>
+                                <a href="#" class="font-weight-lighter font-size-16"><%= noty.name %></a> <span class="badge badge-danger">New</span><br><br>
+                            <% } %>
+                        <% }); %>
                     </div>
                 </div>
                 <div class="alert filled-lm" id="qt" role="alert">
@@ -294,10 +290,11 @@
         console.log(id);
         $.get(`/getAScheme/${id}`, function(data, status) {
             console.log(data);
-            $('#scheme_title').html(data[1])
-            $('#scheme_desc').html(data[2])
-            $('#scheme_date').html(data[3])
-            $('#scheme_cost').html(data[5])
+            $('#scheme_title').html(data[1]);
+            $('#scheme_desc').html(data[2]);
+            $('#scheme_date').html(data[3]);
+            $('#scheme_cost').html(data[5] + "(Rs)");
+            $("#dimage").attr("src", 'uploads/'+ data[7]);
 
             $("#contract_id").val(data[0])
         })

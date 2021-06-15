@@ -22,6 +22,7 @@ contract userContract {
         address contractor;
         uint cost;
         uint256 createdAt;
+        string image_path;
         bool isAlloted;
     }
   
@@ -112,14 +113,14 @@ contract userContract {
         
     }
     
-    function addScheme(string memory _name, string memory _date, string memory _description, uint  _cost) public {
+    function addScheme(string memory _name, string memory _date, string memory _description, uint  _cost, string memory _image_path) public {
         require(bytes(_name).length > 0 , "Name should not be null");
         // require(_owner != address(0x0), "Address should not be null"); for initial 0x0 must be owner
         require(_cost > 0, "Invalid cost");
         schemeCount++;
         
         // Add scheme to Scheme structure with mapping schemes
-        schemes[schemeCount] = Scheme(schemeCount, _name,_description, _date, address(0), _cost, block.timestamp , false);
+        schemes[schemeCount] = Scheme(schemeCount, _name,_description, _date, address(0), _cost, block.timestamp ,_image_path ,false );
         emit Addscheme(schemeCount, _name,_description, _date, msg.sender, _cost, block.timestamp);
     }
     
@@ -136,10 +137,10 @@ contract userContract {
         }
     }
     
-    function updateScheme(uint _id,string memory _name,string memory _description, string memory _date, uint  _cost) public returns(Scheme memory) {
+    function updateScheme(uint _id,string memory _name,string memory _description, string memory _date, uint  _cost,string memory _image_path) public returns(Scheme memory) {
         require(_id <= schemeCount, "Invalid scheme id");
         if(_id == schemes[_id].id) {
-            schemes[_id] = Scheme(_id, _name, _description, _date, address(0), _cost, now , false);
+            schemes[_id] = Scheme(_id, _name, _description, _date, address(0), _cost, now ,_image_path, false);
             return schemes[_id];
         }
     }
@@ -201,6 +202,7 @@ contract userContract {
         uint256 bidAmount;
         uint256 createdAt;
         uint256 contract_id;
+        bool isApproved;
     }
     
     event AddBid(
@@ -210,7 +212,7 @@ contract userContract {
         uint256 createdAt
     );
     mapping(uint256 => Bid) public bids;
-    uint bidCount=0;
+    uint public bidCount=0;
     
     function bidContract(address _contractor, uint  _contractId, uint _bidAmount, string memory _name_of_contractor) public returns(string memory) {
         require(_contractor != address(0), "Address should not be null");
@@ -226,7 +228,7 @@ contract userContract {
             // Adding bid to bids mapping if criteria satisfy
         if(_contractId == schemes[_contractId].id && schemes[_contractId].isAlloted == false &&  _bidAmount <= schemes[_contractId].cost) {
             bidCount++;
-            bids[bidCount] = Bid(bidCount, _name_of_contractor, _contractor, _bidAmount, block.timestamp, _contractId);
+            bids[bidCount] = Bid(bidCount, _name_of_contractor, _contractor, _bidAmount, block.timestamp, _contractId, false);
             emit AddBid(_contractor, _contractId, _bidAmount, block.timestamp);
             return "Bid added successful";
         } else {
@@ -242,6 +244,9 @@ contract userContract {
             Scheme storage scheme = schemes[_id];
             scheme.isAlloted = true;
             scheme.contractor = _contractor;
+            
+            Bid storage bid = bids[_bidId];
+            bid.isApproved = true;
             return true;
         }
         return false;
@@ -262,4 +267,40 @@ contract userContract {
             return bids[_contractId];
         }
     }
+    function deleteBid(uint256 _bidId) public returns (bool) {
+        require(_bidId > 0, "Invalid Id");
+        if(_bidId == bids[_bidId].bidId) {
+            delete bids[_bidId];
+            return true;
+        }
+        return false;
+    }
+    
+    struct Funds {
+        uint256 fund_id;
+        uint256 amount;
+        uint contract_id;
+        string contractor;
+        bool isAllocated;
+    }
+    mapping(uint256 => Funds) public funds;
+    uint256 public fundCount=0;
+    
+    function giveFund(uint256 _amount, string memory _contractor, uint256 _contract_id, uint _bid_id ) public returns(bool) {
+        require(_amount > 0, "Invalid amount");
+        require(bytes(_contractor).length > 0, "Invalid contractor name");
+        require(_contract_id > 0, "Invalid contract id");
+        // Checking the scheme is exist or not and allocated .
+        if(_contract_id == schemes[_contract_id].id && schemes[_contract_id].isAlloted == true ) {
+            // checking if bid is valid or not
+            if(bids[_bid_id].bidId == _bid_id && bids[_bid_id].isApproved == true && _amount <= bids[_bid_id].bidAmount ) {
+                fundCount  ++;
+                funds[fundCount] = Funds(fundCount, _amount, _contract_id, _contractor, true);
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
+    
 }

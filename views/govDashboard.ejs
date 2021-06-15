@@ -16,7 +16,7 @@
                             </span>
                             Bid Section
                         </a>
-                        <a href="#" class="sidebar-link sidebar-link-with-icon">
+                        <a href="#modal-8" class="sidebar-link sidebar-link-with-icon">
                             <span class="sidebar-icon bg-transparent justify-content-start mr-0">
                                 <!-- bg-transparent = background-color: transparent, justify-content-start = justify-content: flex-start, mr-0 = margin-right: 0 -->
                                 <i class="fa fa-newspaper-o" aria-hidden="true"></i>
@@ -33,12 +33,12 @@
                             </span>
                             Launch New Scheme
                         </a>
-                        <a href="#" class="sidebar-link sidebar-link-with-icon">
+                        <a href="#modal-7" class="sidebar-link sidebar-link-with-icon">
                             <span class="sidebar-icon bg-success text-dark rounded-circle">
                                 <!-- bg-success = background-color: var(--success-color), text-dark = color: var(--lm-base-text-color), rounded-circle = border-radius: 50% -->
                                 <i class="fa fa-file-excel-o" aria-hidden="true"></i>
                             </span>
-                            Vendors and Contractors
+                            Suppliers and Contractors
                         </a>
                         <a href="/transactions" class="sidebar-link sidebar-link-with-icon">
                             <span class="sidebar-icon bg-secondary text-dark rounded-circle">
@@ -67,7 +67,7 @@
                                 <span aria-hidden="true">&times;</span>
                             </a>
                             <h5 class="modal-title">Add A New Scheme</h5>
-                            <form action="/addScheme" method="post">
+                            <form action="/addScheme" method="post" enctype="multipart/form-data">
                                 <div class="form-group">
                                     <label for="name" class="required">Name</label>
                                     <input type="text" name="name" id="name" class="form-control"
@@ -82,6 +82,11 @@
                                     <label for="desc" class="required">Description</label>
                                     <textarea class="form-control" name="description"
                                         placeholder="Give detailed description about scheme/ project"></textarea>
+                                </div>
+                                <div class="form-group">
+                                        <label for="image" class="required">Feature Image</label>
+                                        <input type="file" id="fimage" name="fimage" class="form-control" 
+                                        required="required">
                                 </div>
                                 <div class="form-group">
                                     <label for="date" class="required">Date</label>
@@ -102,7 +107,7 @@
                                 <span aria-hidden="true">&times;</span>
                             </a>
                             <h5 class="modal-title">Update Scheme</h5>
-                            <form action="/updateScheme" method="post">
+                            <form action="/updateScheme" method="post" enctype="multipart/form-data">
                                 <input type="hidden" id="scheme_id" name="scheme_id">
                                 <div class="form-group">
                                     <label for="name" class="required">Name</label>
@@ -120,12 +125,88 @@
                                         placeholder="Give detailed description about scheme/ project"></textarea>
                                 </div>
                                 <div class="form-group">
+                                        <label for="image" class="required">Feature Image</label>
+                                        <input type="file" id="fimage" name="fimage" class="form-control" 
+                                        required="required">
+                                </div>
+                                <div class="form-group">
                                     <label for="date" class="required">Date</label>
                                     <input type="date" id="date" name="date" class="form-control" placeholder="Date"
                                         required="required">
                                 </div>
                                 <input class="btn btn-secondary btn-block" type="submit" value="Update Scheme">
                             </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal for displaying contractor and vendors list -->
+                <div class="modal ie-scroll-fix" id="modal-7" tabindex="-1" role="dialog">
+                
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content w-full"> 
+                        <a href="#" class="close" role="button" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </a>
+                            <h4 class="text-center">List of Members </h4>
+                        <div class="dataTable text-center">
+                                <!-- Responsive table -->
+                                <div class="w-1100 mw-full">
+                                <!-- w-400 = width: 40rem (400px), mw-full = max-width: 100% -->
+                                <div class="card p-0 bg-very-dark-dm">
+                                    <!-- p-0 = padding: 0, bg-very-dark-dm = background-color: var(--dark-color-dark) only in dark mode -->
+                                    <div class="table-responsive m-10" >
+                                    <table class="table table-inner-bordered stripe " id="myTable">
+                                        <thead>
+                                        <tr>
+                                            <th>#S.No</th>
+                                            <th>Name of Members</th>
+                                            <th>Position</th>
+                                            <th>Mobile No.</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% allUsers.forEach((users, index)=> { %>
+                                        <tr>
+                                            <th><%= index+1 %></th>
+                                            <td><%= users.name %></td>
+                                            <td><%= users.accountType %></td>
+                                            <td><%= users.mobile %></td>
+                                        </tr>
+                                            <% }) %>
+                                        </tbody>
+                                    </table>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal for notification -->
+                <div class="modal" id="modal-8" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <a href="#" class="btn close" role="button" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </a>
+                            <h5 class="modal-title">Add a Notification</h5>
+                          
+                                <div class="form-group">
+                                    <label for="title" class="required">Title</label>
+                                    <input type="text" name="title" id="title" class="form-control"
+                                        placeholder="Give a title" required="required">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="desc" class="required">Description</label>
+                                    <textarea class="form-control" name="desc" id="desc"
+                                        placeholder="Give detailed description about Notification"></textarea>
+                                </div>
+                                <button onclick="addNoty()" class="btn btn-secondary btn-block" >Add Notification</button>
+                           
                         </div>
                     </div>
                 </div>
@@ -295,6 +376,25 @@
                                                 $('#modal-3 #description').val(data[2]);
                                                 $('#modal-3 #date').val(data[3]);
                                                 $('#modal-3 #cost').val(data[5]);
+                                                //  $('#modal-3 #fimage').val(data[7]);
                                             })
+                                        }
+
+                                        function addNoty() {
+                                            const title = $('#modal-8 #title').val();
+                                            const description = $('#modal-8 #desc').val();
+                                            $.ajax({
+                                                type: "POST",
+                                                url: "/notification",
+                                                data : { title, description },
+                                                success: function (response) {
+                                                    $('#modal-8').hide();
+                                                    toastAlert("Success", "Notification Added", "alert-success");
+                                                },
+                                                error: function(xhr) {
+                                                    toastAlert("Error", xhr.responseText, "alert-danger");
+                                                    $('#modal-8').hide();
+                                                }
+                                            }) ;
                                         }
                                     </script>

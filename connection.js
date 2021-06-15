@@ -1,7 +1,7 @@
 const Web3 = require('web3')
 
 let web3;
-contractAddress = '0x27Cb0f1a9fd775BF666b151BbB41b601C385741e'
+contractAddress = '0xdfC0b412A4Cf696970422274E2598a4db50571FC'
 ABI = [
 	{
 		"anonymous": false,
@@ -109,6 +109,11 @@ ABI = [
 				"internalType": "uint256",
 				"name": "_cost",
 				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "_image_path",
+				"type": "string"
 			}
 		],
 		"name": "addScheme",
@@ -252,6 +257,25 @@ ABI = [
 		"type": "function"
 	},
 	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_bidId",
+				"type": "uint256"
+			}
+		],
+		"name": "deleteBid",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"anonymous": false,
 		"inputs": [
 			{
@@ -275,6 +299,40 @@ ABI = [
 		],
 		"name": "GetAddress",
 		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_amount",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "_contractor",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_contract_id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_bid_id",
+				"type": "uint256"
+			}
+		],
+		"name": "giveFund",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
 	},
 	{
 		"inputs": [
@@ -396,6 +454,11 @@ ABI = [
 				"internalType": "uint256",
 				"name": "_cost",
 				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "_image_path",
+				"type": "string"
 			}
 		],
 		"name": "updateScheme",
@@ -436,6 +499,11 @@ ABI = [
 						"internalType": "uint256",
 						"name": "createdAt",
 						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "image_path",
+						"type": "string"
 					},
 					{
 						"internalType": "bool",
@@ -601,6 +669,11 @@ ABI = [
 						"type": "uint256"
 					},
 					{
+						"internalType": "string",
+						"name": "image_path",
+						"type": "string"
+					},
+					{
 						"internalType": "bool",
 						"name": "isAlloted",
 						"type": "bool"
@@ -609,6 +682,19 @@ ABI = [
 				"internalType": "struct userContract.Scheme[]",
 				"name": "",
 				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "bidCount",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",
@@ -653,6 +739,11 @@ ABI = [
 				"internalType": "uint256",
 				"name": "contract_id",
 				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "isApproved",
+				"type": "bool"
 			}
 		],
 		"stateMutability": "view",
@@ -671,6 +762,58 @@ ABI = [
 			{
 				"internalType": "bool",
 				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "fundCount",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "funds",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "fund_id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "contract_id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "contractor",
+				"type": "string"
+			},
+			{
+				"internalType": "bool",
+				"name": "isAllocated",
 				"type": "bool"
 			}
 		],
@@ -718,6 +861,11 @@ ABI = [
 						"internalType": "uint256",
 						"name": "contract_id",
 						"type": "uint256"
+					},
+					{
+						"internalType": "bool",
+						"name": "isApproved",
+						"type": "bool"
 					}
 				],
 				"internalType": "struct userContract.Bid",
@@ -763,6 +911,11 @@ ABI = [
 						"internalType": "uint256",
 						"name": "contract_id",
 						"type": "uint256"
+					},
+					{
+						"internalType": "bool",
+						"name": "isApproved",
+						"type": "bool"
 					}
 				],
 				"internalType": "struct userContract.Bid[]",
@@ -860,6 +1013,11 @@ ABI = [
 						"internalType": "uint256",
 						"name": "createdAt",
 						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "image_path",
+						"type": "string"
 					},
 					{
 						"internalType": "bool",
@@ -979,6 +1137,11 @@ ABI = [
 				"internalType": "uint256",
 				"name": "createdAt",
 				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "image_path",
+				"type": "string"
 			},
 			{
 				"internalType": "bool",

@@ -6,7 +6,9 @@ require("dotenv").config();
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const flash = require("express-flash");
+var multer  = require('multer');
 const cors = require('cors');
+const path = require("path");
 const app = express();
 
 // ----------------- Middelware Manager ---------------------
@@ -36,6 +38,17 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(flash());
 app.use(expressLayouts);
 app.use(express.static(__dirname + "/public"));
+
+// Multer 
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb)=> cb(null, './public/uploads/'),
+    filename: (req, file, cb)=>{
+        cb(null, file.originalname )
+    }
+});
+
+var upload = multer({ dest: '/public/uploads/',storage: storage });
 
 // ----------------------- Import Controllers / URL Router --------------------------------
 const regController = require("./controllers/User");
@@ -71,6 +84,7 @@ app.post("/reset", rpass.setNewPwd);
 app.get("/Dashboard", dashboardController.dashboard);
 app.get("/Dashboard/bid", bidController.bidSection);
 app.post("/Dashboard/approve", bidController.approveBid);
+app.get('/Dashboard/delete/:bidId', bidController.deleteBid);
 
 // Logout Handlers
 app.get("/logout", loginController.logout);
@@ -81,9 +95,9 @@ app.get('/getTransaction/:hash', operations.getTransaction)
 // Action Handlers for schemes
 app.get('/allSchemes', operations.allSchemes)
 app.get('/getAScheme/:id', operations.getAScheme)
-app.post('/addScheme', operations.addScheme)
+app.post('/addScheme',upload.single('fimage'), operations.addScheme)
 app.get('/deleteScheme/:id', operations.deleteScheme)
-app.post('/updateScheme', operations.updateScheme)
+app.post('/updateScheme',upload.single('fimage'), operations.updateScheme)
 
 // Action handler for Matrials 
 app.get('/getAMaterial/:id', operations.getAMaterial)
@@ -94,6 +108,10 @@ app.post('/updateMaterial', operations.updateMaterial)
 //  Handlers for Bid 
 app.post('/makeBid', operations.makeBid)
 app.get('/Dashboard/getBid/:contract_id', operations.getBid)
+app.get('/myScheme', bidController.myScheme);
+
+// Handler for the Funds
+app.post('/addFund', bidController.addFund);
 
 // ContactUs Handlers
 app.get("/contact", contactUs.getPage);
@@ -102,6 +120,10 @@ app.get("/QueryStatus", contactUs.trackQuery);
 
 // Other API Handlers
 app.get("/VerifyMail", verifyEmail.verify);
+
+// notification
+app.post('/notification', operations.notification);
+app.get('/notification', operations.getNotification);
 
 // ---------------------------- Init Server -------------------
 // Start Server
