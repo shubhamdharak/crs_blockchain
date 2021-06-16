@@ -113,6 +113,9 @@ app.get('/myScheme', bidController.myScheme);
 // Handler for the Funds
 app.post('/addFund', bidController.addFund);
 
+app.post('/addProgress',upload.array('wimage',5), bidController.addProgress);
+app.get('/progress', bidController.progress)
+
 // ContactUs Handlers
 app.get("/contact", contactUs.getPage);
 app.post("/contact", contactUs.storeQuery);

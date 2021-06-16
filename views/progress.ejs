@@ -48,12 +48,12 @@
                             
                             Transaction Manager
                         </a>
-                        <a href="/contact" class="sidebar-link sidebar-link-with-icon">
+                        <a href="#" class="sidebar-link sidebar-link-with-icon">
                             <span class="sidebar-icon bg-danger text-white rounded-circle">
                                 <!-- bg-danger = background-color: var(--danger-color), text-white = color: white, rounded-circle = border-radius: 50% -->
                                 <i class="fa fa-file-powerpoint-o" aria-hidden="true"></i>
                             </span>
-                            Help Desk
+                            Verification Desk
                         </a>
                     </div>
                 </div>
@@ -212,9 +212,7 @@
                 </div>
 
                 <!-- Dashboard Content -->
-                <h3 class="ml-10">Latest Contract and Schemes </h3>
-
-                <% if (typeof allSchemes !='object' ) { %>
+                <% if (typeof allProgress !='object' ) { %>
                     <div class="card">
 
                         <div class="row">
@@ -239,121 +237,64 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card">
-                        <div class="row">
-                            <div class="col-10">
-                                <h2 class="card-title">
-                                    Scheme Name 2
-                                    <span class="badge badge-danger">New</span>
-                                </h2>
-
-                                <div>Scheme Description</div>
-                                <div>Name of Vendors who are interested in this Scheme</div>
-                                <div>Scheme Launched By :</div>
-                                <div>Time and Budget Estimation :</div>
-                            </div>
-                            <div class="col-2">
-                                <button class="btn btn-success btn-sm" style="margin:10px;" type="button">Delete
-                                    Scheme</button>
-                                <button class="btn btn-secondary btn-sm" style="margin:10px;" type="button">Action
-                                    Buttons</button>
-                                <button class="btn btn-primary btn-sm" style="margin:10px;" type="button">Update
-                                    Scheme</button>
-                            </div>
-                        </div>
-                    </div>
+                    
 
                     <% } else { %>
 
                     </div>
 
-                        <% allSchemes.forEach((scheme)=> { %>
-                            <% if(scheme.id !=0 && scheme.isAlloted == true  ) { %>
-                                <div class="card shadow-lg border rounded" id="<%= scheme.id %>">
+                        <% allProgress.forEach((progress)=> { %>
+                            <% if(progress.bid_id !=0   ) { %>
+                                <div class="card shadow-lg border rounded" id="<%= progress.bid_id %>">
                                     <div class="row">
                                         <div class="col-10">
                                             <h2 class="card-title">
-                                                <%= scheme.name.toUpperCase() %>
-                                                    <span class="badge badge-danger">New</span>
+                                                <%= progress.contract_name.toUpperCase() %>
                                                     <span class="badge badge-success">Allocated</span>
                                             </h2>
 
                                             <div class="font-size-16">
-                                                Contractor Address : <%= scheme.contractor %>
+                                                Contractor Name : <%= progress.contractor_name %>
                                             </div>
 
                                             <div class="font-size-16">
-                                                <%= scheme.description.substring(0,350) %> ....
+                                                Status :<%= progress.status %>
                                             </div>
-                                            <div>Date of End (Biding) : <%= scheme.date %>
+                                            <div class=" mb-10">Fund Usage : <%= progress.fundUsed %>
                                             </div>
-                                            <div>Budget Estimation : <%= scheme.cost %> Rs
+                                            <div>
+                                                Updated at : <%= progress.createdAt %>
+                                            </div>
+                                            <div class="mt-10">
+                                                <details class="collapse-panel w-400 mw-full"> <!-- w-400 = width: 40rem (400px), mw-full = max-width: 100% -->
+                                                    <summary class="collapse-header">
+                                                      view Images
+                                                    </summary>
+                                                    <div class="collapse-content">
+                                                        
+                                                      <img src="uploads/<%=progress.imageNames.trim() %>" alt="">
+                                                        
+                                                    </div>
+                                                  </details>
                                             </div>
                                         </div>
-                                        <div class="col-2">
-                                            <button class="btn btn-success btn-md" id="<%= scheme.id %>"
-                                                onClick="deleteScheme('<%= scheme.id %>')" style="margin:10px;"
-                                                type="button">Delete Scheme</button>
-                                            <div class="dropdown  with-arrow">
-                                                <button class="btn btn-secondary btn-md" data-toggle="dropdown" type="button" id="..." aria-haspopup="true" aria-expanded="false" style="margin:10px;">
-                                                    Action <i class="fa fa-angle-down ml-5" aria-hidden="true"></i> <!-- ml-5 = margin-left: 0.5rem (5px) -->
-                                                </button>
-                                                <div class="dropdown-menu" aria-labelledby="...">
-                                                    <button  class="btn btn-primary btn-sm" id="<%= scheme.id %>"
-                                                        onclick="Updatevalue('<%= scheme.id %>')" style="margin:10px;"
-                                                        type="button">Update Scheme</button>
-                                                </div>
-                                            </div>
+                                        
                                     </div>
                                     </div>
-                                </div>
+                               
                                 <hr>
-                                    <% } else if(scheme.id !=0 && scheme.isAlloted == false  ) { %>
-
-                                        <div class="card shadow-lg border rounded" id="<%= scheme.id %>">
-                                            <div class="row">
-                                                <div class="col-10">
-                                                    <h2 class="card-title">
-                                                        <%= scheme.name.toUpperCase() %>
-                                                            <span class="badge badge-danger">New</span>
-                                                    </h2>
-        
-                                                    <div class="font-size-16">
-                                                        <%= scheme.description.substring(0,350) %> ....
-                                                    </div>
-                                                    <div>Date of End (Biding) : <%= scheme.date %>
-                                                    </div>
-                                                    <div>Budget Estimation : <%= scheme.cost %> Rs
-                                                    </div>
-                                                </div>
-                                                <div class="col-2">
-                                                    <button class="btn btn-success btn-md" id="<%= scheme.id %>"
-                                                        onClick="deleteScheme('<%= scheme.id %>')" style="margin:10px;"
-                                                        type="button">Delete Scheme</button>
-                                                    <div class="dropdown  with-arrow">
-                                                        <button class="btn btn-secondary btn-md" data-toggle="dropdown" type="button" id="..." aria-haspopup="true" aria-expanded="false" style="margin:10px;">
-                                                            Action <i class="fa fa-angle-down ml-5" aria-hidden="true"></i> <!-- ml-5 = margin-left: 0.5rem (5px) -->
-                                                        </button>
-                                                        <div class="dropdown-menu" aria-labelledby="...">
-                                                            <button  class="btn btn-primary btn-sm" id="<%= scheme.id %>"
-                                                                onclick="Updatevalue('<%= scheme.id %>')" style="margin:10px;"
-                                                                type="button">Update Scheme</button>
-                                                        </div>
-                                                    </div>
-                                            </div>
-                                            </div>
-                                        </div>
-                                    <% } %>
-                                        <% }) %>
+                                    <% }  %>
+                        <% }) %>
                 
                                 
-                                <% } %>
-                                    <!-- Dashboard Content End -->
+                    <% } %>
+
+                <!-- Dashboard Content End -->
                                     <script>
                                         // Change user Role
-                                        document.getElementById("userRole").innerHTML = "<%= userRole %>"
+                                        
                                         // Add Sidebar to Page
-                                        $("#sidebar").addClass("with-sidebar")
+                                        $("#sidebar").addClass("with-sidebar");
 
                                         function deleteScheme(id) {
                                             const response = confirm("Are you sure, Once deleted it can not be retrive again")

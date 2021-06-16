@@ -1,6 +1,8 @@
 const connection = require('../connection');
 const operations = require('./operations');
 const Notification = require('../models/notifications');
+const {regSchema} = require('../models/scheme');
+
 function authenticate(req){
     if(req.session.isValidUser === undefined || req.session.userId === undefined || req.session.userRole === undefined ){
         return false
@@ -13,7 +15,7 @@ module.exports ={
             if(req.session.userRole === "Government Officer"){
                 connection.initWeb3().then( async ()=> {
                     const allSchemes = await connection.initContract().methods.allSchemes().call();
-                    const allUsers = await operations.getUsers();
+                    const allUsers = await regSchema.find();
                     res.render("govDashboard",{isValid:true,userRole:req.session.userRole, allSchemes: allSchemes, allUsers:allUsers})
                 })
                 .catch((e)=> {
@@ -25,7 +27,8 @@ module.exports ={
             }
             else if(req.session.userRole === "vendor"){
                 const allMaterials = await connection.initContract().methods.allMaterials().call()
-                res.render("userDashboard",{isValid:true,userRole:req.session.userRole,allMaterials:allMaterials})
+                const allNoty = await Notification.find();
+                res.render("userDashboard",{isValid:true,userRole:req.session.userRole,allMaterials:allMaterials, allNoty:allNoty})
             }
             else if(req.session.userRole === "contractor"){
                 const allSchemes = await connection.initContract().methods.allSchemes().call()

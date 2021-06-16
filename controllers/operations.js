@@ -5,16 +5,20 @@ const {regSchema} = require('../models/scheme');
 const Bids = require('../models/bid');
 const { trackQuery } = require("./contactUs");
 const Contract = require('../models/contract');
+const Material = require('../models/material');
 const Notification = require('../models/notifications');
 const fundSchema = require('../models/fund');
+const progress = require("../models/progress");
 
-let sender =  '0x94730953F6176ADA6E70F1f66c4A203631d2d97a'
+
+let sender =  '0x6c72f47049b7fd88aa909793506997459D523DC9'
 
 //  Saves transaction history to database for retriving purpose
-async function transaction(req, res, scheme) {
+async function transaction(req, res, scheme, activity) {
     const data = await new Transaction({
         transactionHash : scheme.transactionHash,
-        blockNumber : scheme.blockNumber
+        blockNumber : scheme.blockNumber,
+        activity: activity
     })
     .save()
 
@@ -67,7 +71,7 @@ module.exports = {
         try {
             const scheme = await connection.initContract().methods.addScheme(name, date, description,cost, fileName).send({from: sender, gas:3000000})
             console.log(scheme);
-            transaction(req, res, scheme)
+            transaction(req, res, scheme, 'Add Scheme') // Add to transaction  collection
             const allSchemes = await connection.initContract().methods.allSchemes().call();
             const contractCount = await connection.initContract().methods.schemeCount().call();
             // add scheme to database
@@ -105,7 +109,7 @@ module.exports = {
                     console.log("Deleted successful...");
                     return true;
                 });
-            transaction(req, res, result)
+            transaction(req, res, result, 'Delete Scheme')
             res.status(200).json({success: "Deleted"})
 
         } catch (error) {
@@ -120,7 +124,7 @@ module.exports = {
 
         try {
             const result = await connection.initContract().methods.updateScheme(scheme_id, name, description, date,cost, fileName).send({from: sender})
-            transaction(req, res, result)
+            transaction(req, res, result, 'Update Scheme')
             const allSchemes = await connection.initContract().methods.allSchemes().call();
             // Update the values in db
             try {
@@ -159,9 +163,15 @@ module.exports = {
     addMaterial : async (req, res)=> {
         const { name, cost } = req.body
         try {
-            const material = await connection.initContract().methods.addMaterial(name, sender,cost).send({from: sender, gas:3000000})
-            console.log(material);
-            transaction(req, res, material)
+            const result = await connection.initContract().methods.addMaterial(name, sender,cost).send({from: sender, gas:3000000})
+            const materialCount = await connection.initContract().methods.materialCount().call();
+            console.log(result);
+            const mat = await new Material({
+                material_id: materialCount,
+                name: name,
+                cost: cost
+            }).save();
+            transaction(req, res, result, "Add Material");
             const allMaterials = await connection.initContract().methods.allMaterials().call()
             req.flash("success", "Materal added successfully")
             return  res.render("userDashboard",{isValid:true,userRole:req.session.userRole,allMaterials:allMaterials })
@@ -176,7 +186,15 @@ module.exports = {
         const material_id  = parseInt(req.params.id)
         try {
             const result = await connection.initContract().methods.removeMaterial(material_id).send({from : sender})
-            transaction(req, res, result)
+            Material.deleteOne({material_id: material_id}, function(err) {
+                if(err) {
+                    console.log(err.message);
+                    return req.flash("error",err.message);
+                }
+                console.log("Deleted successful...");
+                return true;
+            });
+            transaction(req, res, result, 'Delete Material')
             res.status(200).json({success: "Deleted"})
 
         } catch (error) {
@@ -189,8 +207,15 @@ module.exports = {
         const {Material_id, name, cost} = req.body
         try {
             const result = await connection.initContract().methods.updateMaterial(Material_id,name,sender,cost).send({from: sender})
-            transaction(req, res, result)
+            transaction(req, res, result, 'Material Update')
             const allMaterials = await connection.initContract().methods.allMaterials().call()
+
+            const mat = await  Material.findOneAndUpdate({material_id:Material_id},{
+                name: name,
+                cost: cost
+            }, {new:true})
+
+            transaction(req, res, result, "Update Material")
             req.flash("success", "Material updated!")
             return  res.render("userDashboard",{isValid:true,userRole:req.session.userRole, allMaterials:allMaterials})
 
@@ -202,7 +227,8 @@ module.exports = {
     },
     transactions : async (req, res) => {
         const allTransactions = await Transaction.find()
-        res.render('Transactions', {allTransactions : allTransactions})
+        const allUsers = await regSchema.find();
+        res.render('Transactions', {allTransactions : allTransactions,allUsers:allUsers})
     },
     getTransaction: async (req, res)=> {
         const hash = req.params.hash
@@ -237,7 +263,7 @@ module.exports = {
                     contractor_name : req.cookies.user_name
                 }).save();
                 console.log(bidDb)
-
+                transaction(req, res, bid, "Add Bid")
                 if(Object.keys(bid.events).length === 0) {
                     Bids.deleteOne({_id: bidDb._id}, function(err) {
                         if(err) {
@@ -273,6 +299,7 @@ module.exports = {
         } catch (error) {
             console.log(error.message);
         }
+        transaction(req, res, result, "Approved Bid");
         return true;
     },
     getBid: async (req, res)=> {
@@ -294,6 +321,7 @@ module.exports = {
                     console.log("Deleted successful...");
                     return true;
                 });
+                transaction(req, res, bid, "Delete Bid")
             return true;
         } catch(error) {
             console.log(error.message);
@@ -317,6 +345,7 @@ module.exports = {
             description:description
         }).save();
         // req.flash('success', 'Notification has been added!');
+        transaction(req, res, notification, "Notification Added")
         return res.json({'success':'Added new Notification'})
         } catch (error) {
             console.log(error.message);
@@ -345,7 +374,36 @@ module.exports = {
                 amount : amount,
                 isAllocated : true
             }).save();
+            transaction(req, res, fund, "Fund Added")
             return true;
+        } catch (error) {
+            console.log(error.message);
+            return false;
+        }
+    },
+    addProgress: async (req, res)=> {
+        const {fund , status, bidID, contractName, contractorName } = req.body;
+        const wimage = req.files;
+        let images ='';
+
+        wimage.forEach(image => {
+            images = images +' '+ image.filename;
+        });
+        
+        // console.log(fund, images, status);
+        // console.log(bidID, contractName);
+        try {
+
+        const result = await new progress({
+            contract_name: contractName,
+            contractor_name: contractorName,
+            bid_id: bidID,
+            status : status,
+            fundUsed : fund,
+            imageNames: images
+        }).save();
+
+        return true;
         } catch (error) {
             console.log(error.message);
             return false;
