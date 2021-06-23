@@ -49,7 +49,7 @@
                             
                             Transaction Manager
                         </a>
-                        <a href="/contact" class="sidebar-link sidebar-link-with-icon">
+                        <a href="/AllQuery" class="sidebar-link sidebar-link-with-icon">
                             <span class="sidebar-icon bg-danger text-white rounded-circle">
                                 <!-- bg-danger = background-color: var(--danger-color), text-white = color: white, rounded-circle = border-radius: 50% -->
                                 <i class="fa fa-file-powerpoint-o" aria-hidden="true"></i>
@@ -273,7 +273,7 @@
                                             <h2 class="card-title d-flex">
                                             Name of Contractor: <%= bid.contractor_name %>
                                             <% if(bid.isApprove==true) { %>
-                                                <span class="badge badge-danger"> Allocated </span>
+                                                <span class="badge badge-success"> Approved </span>
                                             <% } %>
                                             </h2>
                                             <div>
@@ -297,7 +297,7 @@
                                                 </button>
                                                 <div class="dropdown-menu" aria-labelledby="...">
                                                     <button  class="btn btn-primary btn-sm" id="<%= bid.bid_id %>"
-                                                        onclick="approveBid('<%= bid.bid_id %>','<%= bid.contract_id %>','<%= bid.bid_amount %>' )" style="margin:10px;"
+                                                        onclick="approveBid('<%= bid.bid_id %>','<%= bid.contract_id %>','<%= bid.bid_amount %>','<%= bid.contractor_name %>' )" style="margin:10px;"
                                                         type="button">Approve</button>
                                                         <button  class="btn btn-danger btn-md" id="<%= bid.bid_id %>"
                                                             onclick="deleteBid('<%= bid.bid_id %>' )" style="margin:10px;"
@@ -306,7 +306,7 @@
                                                             <button onclick="addFunds('<%= bid.bid_id %>','<%= bid.contract_id %>','<%= bid.bid_amount %>','<%= bid.contractor_name %>')" class="btn btn-secondary btn-sm" id="<%= bid.id %>"
                                                                 style="margin:10px;"
                                                                 type="button">Add Funds</button>
-                                                            <a  href="/progress" class="btn btn-danger btn-md" id="<%= bid.bid_id %>"
+                                                            <a  href="/progress?id=<%= bid.bid_id %>" class="btn btn-danger btn-md" id="<%= bid.bid_id %>"
                                                                 style="margin:10px;"
                                                                 type="button">view progress</a>
                                                         <% } %>
@@ -329,14 +329,14 @@
                                         $("#sidebar").addClass("with-sidebar");
 
 
-                                        function approveBid(id, contractId, bidAmount) {
+                                        function approveBid(id, contractId, bidAmount, contractor_name) {
                                             const bid_id = parseInt(id);
                                                 halfmoon.toggleModal('modal-6');
                                                 $('#cnfrm').click(function() {
                                                     $.ajax({
                                                         type: "post",
                                                         url : "/Dashboard/approve",
-                                                        data : { bid_id, contractId ,bidAmount },
+                                                        data : { bid_id, contractId ,bidAmount ,contractor_name},
                                                         success: function (response) {
                                                             toastAlert("Success", "Approved", "alert-success");
                                                         },

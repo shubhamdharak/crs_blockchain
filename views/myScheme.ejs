@@ -33,8 +33,16 @@
                                 <!-- bg-success = background-color: var(--success-color), text-dark = color: var(--lm-base-text-color), rounded-circle = border-radius: 50% -->
                                 <i class="fa fa-file-excel-o" aria-hidden="true"></i>
                             </span>
-                            Get Material Details
+                            Request Quotation
                         </a>
+
+                        <a href="#modal-13" class="sidebar-link sidebar-link-with-icon">
+                          <span class="sidebar-icon bg-success text-dark rounded-circle">
+                              <!-- bg-success = background-color: var(--success-color), text-dark = color: var(--lm-base-text-color), rounded-circle = border-radius: 50% -->
+                              <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                          </span>
+                          view my Quotation
+                      </a>
                     
                         <a href="/contact" class="sidebar-link sidebar-link-with-icon">
                             <span class="sidebar-icon bg-danger text-white rounded-circle">
@@ -54,6 +62,7 @@
                         <a href="#" class="close" role="button" aria-label="Close">
                           <span aria-hidden="true">&times;</span>
                         </a>
+                        <% if(allNoty.length > 0) { %>
                             <!-- All Notification -->
                             <% allNoty.forEach((noty)=> { %>
                                 <div class="card shadow border">
@@ -69,6 +78,10 @@
                                     </div>
                                 </div>
                             <% }); %>
+                            
+                            <% } else { %>
+                            <h3 class="text-center">No Notification yet ! Good luck </h3>
+                            <% } %>
                       </div>
                     </div>
                   </div>
@@ -81,20 +94,58 @@
                           <span aria-hidden="true">&times;</span>
                         </a>
                             <!-- All Material -->
-                            <% allMaterial.forEach((material)=> { %>
-                                <div class="card shadow border">
-                                    <div class="row">
-                                        <div class="col-10">
-                                            <h2 class="card-title">
-                                                <%= material.name %>
-                                                <span class="badge badge-danger">New</span>
-                                                <hr>
-                                            </h2>
-                                            <div>Price /cost: <%= material.cost %>(Rs)</div>
-                                        </div>
+                            <div class="dataTable text-center">
+                                <!-- Responsive table -->
+                                <div class="w-1100 mw-full h-full">
+                                  <!-- w-400 = width: 40rem (400px), mw-full = max-width: 100% -->
+                                  <div class="card p-0 bg-very-dark-dm">
+                                    <!-- p-0 = padding: 0, bg-very-dark-dm = background-color: var(--dark-color-dark) only in dark mode -->
+                                    <div class="table-responsive m-10" >
+                                      
+                                      <form action="/addQuta" method="POST">
+                                        <select class="form-control" id="select-1" name="bidId" required>
+                                          <option value="" selected="selected" disabled="disabled">Select the Scheme</option>
+                                          <% allBids.forEach((bid)=>{  %>
+                                            <option value="<%= bid.bid_id%>" ><%= bid.contract_name %></option>
+                                            
+                                            <% }) %>
+                                          </select>
+                                      
+                                      <table class="table table-inner-bordered stripe " id="myTable" class="display">
+                                        <thead>
+                                          <tr>
+                                            
+                                            <th>Material Name</th>
+                                            <th>Cost</th>
+                                            <th>Select</th>  
+                                            <th>Quantity</th> 
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% allMaterial.forEach((material)=> { %>
+                                            <tr>
+                                            <td><%= material.name %></td>
+                                            <td><%= material.cost %></td>
+                                            <td><div class="custom-checkbox ">
+                                                <input type="checkbox"  id="<%= material.material_id %>" name="names" value="<%= material.name %>" >
+                                                <label for="<%= material.material_id %>"> <i class="fa fa-plus" ></i> </label>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <input type="hidden" name="cost" id="<%= material.material_id %>" value="<%= material.cost %>">
+                                                <input type="number" class="text-center " name="quantity" id="<%= material.material_id%>" >
+                                            </td>
+                                          </tr>
+                                          
+                                          <% }) %>
+                                        </tbody>
+                                    </table>
+                                    <input type="submit" class="btn btn-success btn-block" name="submit" value="send request">
+                                </form>
                                     </div>
+                                  </div>
                                 </div>
-                            <% }); %>
+                              </div>
                       </div>
                     </div>
                   </div>
@@ -134,6 +185,90 @@
                     </div>
                   </div>
 
+                  <!-- modal for view Quotation -->
+                  <div class="modal ie-scroll-fix" id="modal-13" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content w-full"> <!-- w-600 = width: 60rem (600px) -->
+                        <a href="#" class="close" role="button" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </a>
+                        <h4 class="text-center text-secondary">Quotation Request (s)</h4>
+                        <% if(allQuotation.length > 0) { %>
+                         
+                            <% allQuotation.forEach((qt)=> { %>
+                            
+                                <div class="card shadow border">
+                                    <div class="row">
+                                        <div class="col-10">
+                                            <h2 class="card-title">
+                                                Name of Contractor : <%= qt.contractor_name %>
+                                               <% if(qt.isApproved ==true) { %>
+                                                <span class="badge badge-success">Approved</span>
+                                                <% } %>
+                                                <hr>
+                                            </h2>
+                                            <div>Contract Name : <%=qt.contract_name %></div>
+                                            <div>Approved : <%= qt.isApproved %></div>
+                                            <div >Total Amount : <%= qt.total_amount %> (Rs)</div>
+                                            <div class="mb-10">Updated at: <%= qt.createdAt %></div>
+                                            <div>
+                                                <details class="collapse-panel w-800 mw-full mt-10"> <!-- w-400 = width: 40rem (400px), mw-full = max-width: 100% -->
+                                                    <summary class="collapse-header">
+                                                      view details
+                                                    </summary>
+                                                    <div class="collapse-content">
+                                                <div class="dataTable text-center">
+                                                    <!-- Responsive table -->
+                                                    <div class="w-1100 mw-full h-full">
+                                                      <!-- w-400 = width: 40rem (400px), mw-full = max-width: 100% -->
+                                                      <div class="card p-0 bg-very-dark-dm">
+                                                        <!-- p-0 = padding: 0, bg-very-dark-dm = background-color: var(--dark-color-dark) only in dark mode -->
+                                                        <div class="table-responsive m-10" >
+                                                            <table class="table table-inner-bordered stripe " id="myTable" class="display">
+                                                                <thead>
+                                                                    <tr>
+                                                                        
+                                                                        <th>Material Name</th>
+                                                                        <th>Quantity</th>
+                                                                        
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    
+                                                                    <% qt.items.forEach((i)=>{ %>
+                                                              
+                                                                <tr>
+                                                                <td><%= i.item_name %></td>
+                                                                <td><%= i.quantity %></td>
+                                                                
+                                                              </tr>
+                                                              <% }) %>
+                                                              
+                                                            </tbody>
+                                                        </table>
+                                                        <input type="text" class="btn btn-rounded btn-success  btn-block " value="Total = <%= qt.total_amount %> (Rs)" disabled="disabled">
+                                              
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </details>
+                                                
+                                            </div>
+                                        
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            <% }); %>
+                            
+                            <% } else { %>
+                            <h3 class="text-center">No Quotation available now </h3>
+                            <% } %>
+                      </div>
+                    </div>
+                  </div>
 
                 <!-- Dashboard Content -->
                 <h3 class="ml-10">My Bids </h3>

@@ -4,6 +4,7 @@ const {regSchema} = require('../models/scheme');
 const progress = require('../models/progress');
 const Notification = require('../models/notifications');
 const Material = require('../models/material');
+const Quotation = require('../models/quatation');
 
 
 module.exports = {
@@ -34,7 +35,8 @@ module.exports = {
         console.log(allBids);
         const allNoty = await Notification.find();
         const allMaterial = await Material.find();
-        res.render('myScheme', {allBids: allBids,allNoty:allNoty,allMaterial:allMaterial})
+        const allQuotation  = await Quotation.find({contractor_name: req.cookies.user_name});
+        res.render('myScheme', {allBids: allBids,allNoty:allNoty,allMaterial:allMaterial,allQuotation :allQuotation })
     },
     addFund : async (req, res)=> {
         try {
@@ -54,21 +56,22 @@ module.exports = {
     },
     addProgress: async (req, res)=> {
         const result = await operations.addProgress(req, res);
+        const allBids = await Bids.find({contractor_name: req.cookies.user_name});
+            const allNoty = await Notification.find();
+            const allMaterial = await Material.find();
+            const allQuotation = await Quotation.find();
         if(result) {
-            const allBids = await Bids.find({contractor_name: req.cookies.user_name});
-            const allNoty = await Notification.find();
-            const allMaterial = await Material.find();
-            return res.render('myScheme', {allBids: allBids,allNoty:allNoty,allMaterial:allMaterial})
+            
+            return res.render('myScheme', {allBids: allBids,allNoty:allNoty,allMaterial:allMaterial,allQuotation:allQuotation})
         } else {
-            const allBids = await Bids.find({contractor_name: req.cookies.user_name});
-            const allNoty = await Notification.find();
-            const allMaterial = await Material.find();
-            return res.render('myScheme', {allBids: allBids,allNoty:allNoty,allMaterial:allMaterial})
+            
+            return res.render('myScheme', {allBids: allBids,allNoty:allNoty,allMaterial:allMaterial,allQuotation:allQuotation})
         }
     },
     progress: async (req, res)=> {
+        const bid_id = req.query.id;
         const allUsers = await regSchema.find();
-        const allProgress = await progress.find();
+        const allProgress = await progress.find({bid_id:bid_id});
         const allNoty = await Notification.find();
         const allMaterial = await Material.find();
         return res.render('progress',{allUsers: allUsers, allProgress:allProgress,allNoty:allNoty,allMaterial:allMaterial});

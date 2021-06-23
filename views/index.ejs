@@ -54,7 +54,7 @@
 </div>
 
  <!-- Modal for getting scheme detalis  -->
-<div class="modal modal-full ie-scroll-fix" id="modal-5" tabindex="-1" role="dialog">
+<div class="modal modal-full ie-scroll-fix shadow border" id="modal-5" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <a href="#" class="close" role="button" aria-label="Close">
@@ -90,7 +90,7 @@
         <div class="row row-eq-spacing-lg">
             <h3>  Latest Schemes and Projects </h3>
             <div class="col-lg-9">
-                <% if ( typeof allSchemes != 'object' ) { %>
+                <% if ( typeof allSchemes != 'object' && allSchemes.length < 0 ) { %>
                     <div class="card">
                         <h2 class="card-title">
                             Card title
@@ -179,7 +179,7 @@
                         <!-- Page Content -->
         
                         <%  allSchemes.forEach(function(scheme) { %>
-                            <% if(scheme.id != 0 && scheme.name !=" ") { %>
+                            <% if(scheme.id != 0 && scheme.name.length > 0) { %>
                                 <div class="card">
                                     <h2 class="card-title text-capitalize font-weight-bold">
                                         <%= scheme.name %>
@@ -194,15 +194,21 @@
                                         <h6>Price Estimation :<span> <%= scheme.cost %> </span> (Rs)</h6>
                                     </div>
                                     <div class="fake-content">
+                                        <% if(scheme.isAlloted==true) { %>
+                                            <h6>Status : <span class="badge badge-secondary">Allocated</span> </h6> 
+                                        <% } else { %>
                                         <h6>Status : <span class="badge badge-success">Active</span> </h6> 
+                                        <% } %>
                                     </div>
                 
                                     <a href="#modal-5" class="btn btn-primary" role="button" id="<%= scheme.id %>" onclick="getAscheme('<%= scheme.id %>')">View Details</a>
                                     
                                 </div>
-                                <% }   %>
+                                <% } %>
+                                    
 
-                <% }) } %>
+                    <% })  %>
+            <% } %>
 
                 <!-- Column end here -->
             </div> 

@@ -90,7 +90,7 @@ app.get('/Dashboard/delete/:bidId', bidController.deleteBid);
 app.get("/logout", loginController.logout);
 
 app.get('/transactions', operations.transactions)
-app.get('/getTransaction/:hash', operations.getTransaction)
+app.get('/getTransaction/:hash/:event', operations.getTransaction)
 
 // Action Handlers for schemes
 app.get('/allSchemes', operations.allSchemes)
@@ -104,6 +104,7 @@ app.get('/getAMaterial/:id', operations.getAMaterial)
 app.post('/addMaterial', operations.addMaterial)
 app.get('/deleteMaterial/:id', operations.deleteMaterial)
 app.post('/updateMaterial', operations.updateMaterial)
+app.get('/myMaterials', operations.myMaterials)
 
 //  Handlers for Bid 
 app.post('/makeBid', operations.makeBid)
@@ -120,6 +121,8 @@ app.get('/progress', bidController.progress)
 app.get("/contact", contactUs.getPage);
 app.post("/contact", contactUs.storeQuery);
 app.get("/QueryStatus", contactUs.trackQuery);
+app.get("/AllQuery", contactUs.AllQuery);
+app.post('/resolveQuery', contactUs.resolveQuery);
 
 // Other API Handlers
 app.get("/VerifyMail", verifyEmail.verify);
@@ -127,6 +130,9 @@ app.get("/VerifyMail", verifyEmail.verify);
 // notification
 app.post('/notification', operations.notification);
 app.get('/notification', operations.getNotification);
+
+app.post('/addQuta', operations.addQuta);
+app.post('/approveQuota', operations.approveQuota);
 
 // ---------------------------- Init Server -------------------
 // Start Server

@@ -1,37 +1,75 @@
 const Web3 = require('web3')
 
 let web3;
-contractAddress = '0x5a4c1c5751D3b98007647043356BB91a723F446c'
+contractAddress = '0x3b97c41f470f20d6e00dc2da7823e5dc37d6ed98'
+// Ropsten address - 0x3b97c41f470f20d6e00dc2da7823e5dc37d6ed98
 ABI = [
 	{
 		"anonymous": false,
 		"inputs": [
 			{
 				"indexed": false,
+				"internalType": "string",
+				"name": "ContractorName",
+				"type": "string"
+			},
+			{
+				"indexed": false,
 				"internalType": "address",
-				"name": "contractor",
+				"name": "ContractorAddress",
 				"type": "address"
 			},
 			{
 				"indexed": false,
 				"internalType": "uint256",
-				"name": "contractId",
+				"name": "ContractID",
 				"type": "uint256"
 			},
 			{
 				"indexed": false,
 				"internalType": "uint256",
-				"name": "bidAmount",
+				"name": "BidAmount",
 				"type": "uint256"
 			},
 			{
 				"indexed": false,
 				"internalType": "uint256",
-				"name": "createdAt",
+				"name": "CreatedAt",
 				"type": "uint256"
 			}
 		],
 		"name": "AddBid",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "Amount",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "NameofContractor",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "ContractID",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "BidID",
+				"type": "uint256"
+			}
+		],
+		"name": "AddFunds",
 		"type": "event"
 	},
 	{
@@ -69,19 +107,19 @@ ABI = [
 			{
 				"indexed": false,
 				"internalType": "string",
-				"name": "name",
+				"name": "MaterialName",
 				"type": "string"
 			},
 			{
 				"indexed": false,
 				"internalType": "address",
-				"name": "owner",
+				"name": "MaterialOwner",
 				"type": "address"
 			},
 			{
 				"indexed": false,
 				"internalType": "uint256",
-				"name": "price",
+				"name": "MaterialPrice",
 				"type": "uint256"
 			}
 		],
@@ -127,43 +165,43 @@ ABI = [
 			{
 				"indexed": false,
 				"internalType": "uint256",
-				"name": "id",
+				"name": "SchemeID",
 				"type": "uint256"
 			},
 			{
 				"indexed": false,
 				"internalType": "string",
-				"name": "name",
+				"name": "SchemeName",
 				"type": "string"
 			},
 			{
 				"indexed": false,
 				"internalType": "string",
-				"name": "description",
+				"name": "Description",
 				"type": "string"
 			},
 			{
 				"indexed": false,
 				"internalType": "string",
-				"name": "date",
+				"name": "Date",
 				"type": "string"
 			},
 			{
 				"indexed": false,
 				"internalType": "address",
-				"name": "owner",
+				"name": "ContractorAddress",
 				"type": "address"
 			},
 			{
 				"indexed": false,
 				"internalType": "uint256",
-				"name": "cost",
+				"name": "EstimateCost",
 				"type": "uint256"
 			},
 			{
 				"indexed": false,
 				"internalType": "uint256",
-				"name": "createdAt",
+				"name": "CreatedAt",
 				"type": "uint256"
 			}
 		],
@@ -186,6 +224,11 @@ ABI = [
 				"internalType": "uint256",
 				"name": "_bidId",
 				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "_contractor_name",
+				"type": "string"
 			}
 		],
 		"name": "allocateContract",
@@ -198,6 +241,31 @@ ABI = [
 		],
 		"stateMutability": "nonpayable",
 		"type": "function"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "ContractID",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "ContractorName",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "BidID",
+				"type": "uint256"
+			}
+		],
+		"name": "AllocateContract",
+		"type": "event"
 	},
 	{
 		"inputs": [
@@ -236,29 +304,6 @@ ABI = [
 	{
 		"inputs": [
 			{
-				"internalType": "address",
-				"name": "_addr",
-				"type": "address"
-			},
-			{
-				"internalType": "string",
-				"name": "_name",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "_password",
-				"type": "string"
-			}
-		],
-		"name": "createAccount",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
 				"internalType": "uint256",
 				"name": "_bidId",
 				"type": "uint256"
@@ -280,24 +325,98 @@ ABI = [
 		"inputs": [
 			{
 				"indexed": false,
+				"internalType": "string",
+				"name": "ContractorName",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "BidAmount",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "CreatedAt",
+				"type": "uint256"
+			}
+		],
+		"name": "DeleteBid",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "MaterialName",
+				"type": "string"
+			},
+			{
+				"indexed": false,
 				"internalType": "address",
-				"name": "addr",
+				"name": "MaterialOwner",
 				"type": "address"
 			},
 			{
 				"indexed": false,
+				"internalType": "uint256",
+				"name": "MaterialPrice",
+				"type": "uint256"
+			}
+		],
+		"name": "DeleteMaterial",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "SchemeID",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
 				"internalType": "string",
-				"name": "name",
+				"name": "SchemeName",
 				"type": "string"
 			},
 			{
 				"indexed": false,
 				"internalType": "string",
-				"name": "password",
+				"name": "Description",
 				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "Date",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "ContractorAddress",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "EstimateCost",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "CreatedAt",
+				"type": "uint256"
 			}
 		],
-		"name": "GetAddress",
+		"name": "DeleteScheme",
 		"type": "event"
 	},
 	{
@@ -429,6 +548,31 @@ ABI = [
 		"type": "function"
 	},
 	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "MaterialName",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "MaterialOwner",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "MaterialPrice",
+				"type": "uint256"
+			}
+		],
+		"name": "UpdateMaterial",
+		"type": "event"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -509,6 +653,11 @@ ABI = [
 						"internalType": "bool",
 						"name": "isAlloted",
 						"type": "bool"
+					},
+					{
+						"internalType": "string",
+						"name": "contractor_name",
+						"type": "string"
 					}
 				],
 				"internalType": "struct userContract.Scheme",
@@ -520,77 +669,53 @@ ABI = [
 		"type": "function"
 	},
 	{
+		"anonymous": false,
 		"inputs": [
 			{
+				"indexed": false,
 				"internalType": "uint256",
-				"name": "_id",
+				"name": "SchemeID",
 				"type": "uint256"
 			},
 			{
+				"indexed": false,
 				"internalType": "string",
-				"name": "_name",
+				"name": "SchemeName",
 				"type": "string"
 			},
 			{
+				"indexed": false,
 				"internalType": "string",
-				"name": "_password",
+				"name": "Description",
 				"type": "string"
 			},
 			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "Date",
+				"type": "string"
+			},
+			{
+				"indexed": false,
 				"internalType": "address",
-				"name": "_address",
+				"name": "ContractorAddress",
 				"type": "address"
-			}
-		],
-		"name": "updateUser",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
 			},
 			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			},
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
+				"indexed": false,
 				"internalType": "uint256",
-				"name": "",
+				"name": "EstimateCost",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "CreatedAt",
 				"type": "uint256"
 			}
 		],
-		"name": "accounts",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "addr",
-				"type": "address"
-			},
-			{
-				"internalType": "string",
-				"name": "name",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "password",
-				"type": "string"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
+		"name": "UpdateScheme",
+		"type": "event"
 	},
 	{
 		"inputs": [],
@@ -677,6 +802,11 @@ ABI = [
 						"internalType": "bool",
 						"name": "isAlloted",
 						"type": "bool"
+					},
+					{
+						"internalType": "string",
+						"name": "contractor_name",
+						"type": "string"
 					}
 				],
 				"internalType": "struct userContract.Scheme[]",
@@ -743,25 +873,6 @@ ABI = [
 			{
 				"internalType": "bool",
 				"name": "isApproved",
-				"type": "bool"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "_name",
-				"type": "string"
-			}
-		],
-		"name": "checkAccount",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
 				"type": "bool"
 			}
 		],
@@ -1023,6 +1134,11 @@ ABI = [
 						"internalType": "bool",
 						"name": "isAlloted",
 						"type": "bool"
+					},
+					{
+						"internalType": "string",
+						"name": "contractor_name",
+						"type": "string"
 					}
 				],
 				"internalType": "struct userContract.Scheme",
@@ -1147,19 +1263,11 @@ ABI = [
 				"internalType": "bool",
 				"name": "isAlloted",
 				"type": "bool"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "userCount",
-		"outputs": [
+			},
 			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
+				"internalType": "string",
+				"name": "contractor_name",
+				"type": "string"
 			}
 		],
 		"stateMutability": "view",

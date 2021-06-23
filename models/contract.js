@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const contractScheme = new mongoose.Schema({
     contract_id : {type: Number},
     contract_name : {type: String},
+    contractor_name: {type: String, default: 'NA'},
     description : {type: String},
     date: {type: String},
     address :{type: String},

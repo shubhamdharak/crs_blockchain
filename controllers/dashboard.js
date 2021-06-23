@@ -2,6 +2,9 @@ const connection = require('../connection');
 const operations = require('./operations');
 const Notification = require('../models/notifications');
 const {regSchema} = require('../models/scheme');
+const Material = require('../models/material')
+const Quotation = require('../models/quatation');
+const Bids = require('../models/bid');
 
 function authenticate(req){
     if(req.session.isValidUser === undefined || req.session.userId === undefined || req.session.userRole === undefined ){
@@ -26,14 +29,18 @@ module.exports ={
                 
             }
             else if(req.session.userRole === "vendor"){
-                const allMaterials = await connection.initContract().methods.allMaterials().call()
                 const allNoty = await Notification.find();
-                res.render("userDashboard",{isValid:true,userRole:req.session.userRole,allMaterials:allMaterials, allNoty:allNoty})
+                const allMaterials = await Material.find();
+                const allQuotation = await Quotation.find()
+                res.render("userDashboard",{isValid:true,userRole:req.session.userRole,allMaterials:allMaterials, allNoty:allNoty,allQuotation:allQuotation})
             }
             else if(req.session.userRole === "contractor"){
                 const allSchemes = await connection.initContract().methods.allSchemes().call()
                 const allNoty = await Notification.find();
-                res.render("contractorDash",{isValid:true,userRole:req.session.userRole, allSchemes: allSchemes,allNoty:allNoty})
+                const allMaterial = await Material.find();
+                let allBids = await Bids.find({contractor_name: req.cookies.user_name})
+                const allQuotation = await Quotation.find({contractor_name: req.cookies.user_name})
+                res.render("contractorDash",{isValid:true,userRole:req.session.userRole, allSchemes: allSchemes,allNoty:allNoty,allMaterial:allMaterial,allBids:allBids,allQuotation:allQuotation})
             }
         }
         else{

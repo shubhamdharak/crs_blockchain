@@ -1,4 +1,5 @@
 let contactQueries = require('../models/scheme').contactSchema;
+const {regSchema} = require('../models/scheme')
 var fs = require('fs');
 const mail = require('./mail')
 
@@ -76,6 +77,30 @@ module.exports = {
         }
         catch{
             console.log("Invalid Tokens")
+        }
+    },
+    AllQuery: async (req, res)=> {
+        const allQuery = await contactQueries.find();
+        const allUsers = await regSchema.find()
+        return res.render('contactQuery', {allQuery: allQuery,allUsers:allUsers})
+    },
+    resolveQuery: async(req, res)=> {
+        const {qid, solution} = req.body;
+        try {
+            const query = await contactQueries.findOneAndUpdate({_id:qid},{
+                querySolution: solution,
+                querySts: "Resolved"
+            }, {new:true})
+            req.flash("success", "Query Resolved..");
+            const allUsers = await regSchema.find()
+            const allQuery = await contactQueries.find();
+            return res.render('contactQuery', {allQuery:allQuery,allUsers:allUsers})
+        } catch (error) {
+            console.log(error.message);
+            req.flash("error", "Something went wrong!");
+            const allQuery = await contactQueries.find();
+            const allUsers = await regSchema.find()
+            return res.render('contactQuery',{allQuery:allQuery,allUsers:allUsers})
         }
     }
 }

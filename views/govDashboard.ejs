@@ -48,7 +48,7 @@
                             
                             Transaction Manager
                         </a>
-                        <a href="/contact" class="sidebar-link sidebar-link-with-icon">
+                        <a href="/AllQuery" class="sidebar-link sidebar-link-with-icon">
                             <span class="sidebar-icon bg-danger text-white rounded-circle">
                                 <!-- bg-danger = background-color: var(--danger-color), text-white = color: white, rounded-circle = border-radius: 50% -->
                                 <i class="fa fa-file-powerpoint-o" aria-hidden="true"></i>
@@ -277,18 +277,21 @@
                                                     <span class="badge badge-danger">New</span>
                                                     <span class="badge badge-success">Allocated</span>
                                             </h2>
-
+                                            <div class="font-size-16">
+                                                Contractor Name : <%= scheme.contractor_name %>
+                                            </div>
                                             <div class="font-size-16">
                                                 Contractor Address : <%= scheme.contractor %>
                                             </div>
-
+                                            
                                             <div class="font-size-16">
                                                 <%= scheme.description.substring(0,350) %> ....
                                             </div>
                                             <div>Date of End (Biding) : <%= scheme.date %>
                                             </div>
-                                            <div>Budget Estimation : <%= scheme.cost %> Rs
+                                            <div>Budget Estimation : <%= scheme.cost %> Rs 
                                             </div>
+
                                         </div>
                                         <div class="col-2">
                                             <button class="btn btn-success btn-md" id="<%= scheme.id %>"
@@ -323,7 +326,7 @@
                                                     </div>
                                                     <div>Date of End (Biding) : <%= scheme.date %>
                                                     </div>
-                                                    <div>Budget Estimation : <%= scheme.cost %> Rs
+                                                    <div>Budget Estimation : <%= scheme.cost %> Rs 
                                                     </div>
                                                 </div>
                                                 <div class="col-2">

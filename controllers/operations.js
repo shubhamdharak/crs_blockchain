@@ -9,16 +9,17 @@ const Material = require('../models/material');
 const Notification = require('../models/notifications');
 const fundSchema = require('../models/fund');
 const progress = require("../models/progress");
+const Quotation = require('../models/quatation');
 
-
-let sender =  '0x6c72f47049b7fd88aa909793506997459D523DC9'
+let sender =  '0x6bdB4eb9d6a7B3310D4D7d84e4da6A3b7d321eF8'
 
 //  Saves transaction history to database for retriving purpose
-async function transaction(req, res, scheme, activity) {
+async function transaction(req, res, scheme, activity, event) {
     const data = await new Transaction({
         transactionHash : scheme.transactionHash,
         blockNumber : scheme.blockNumber,
-        activity: activity
+        activity: activity,
+        event: event
     })
     .save()
 
@@ -70,8 +71,7 @@ module.exports = {
         const fileName = req.file.originalname;
         try {
             const scheme = await connection.initContract().methods.addScheme(name, date, description,cost, fileName).send({from: sender, gas:3000000})
-            console.log(scheme);
-            transaction(req, res, scheme, 'Add Scheme') // Add to transaction  collection
+            transaction(req, res, scheme, 'Add Scheme', "Addscheme") // Add to transaction  collection
             const allSchemes = await connection.initContract().methods.allSchemes().call();
             const contractCount = await connection.initContract().methods.schemeCount().call();
             // add scheme to database
@@ -106,10 +106,9 @@ module.exports = {
                         console.log(err.message);
                         return req.flash("error",err.message);
                     }
-                    console.log("Deleted successful...");
                     return true;
                 });
-            transaction(req, res, result, 'Delete Scheme')
+            transaction(req, res, result, 'Delete Scheme',"DeleteScheme")
             res.status(200).json({success: "Deleted"})
 
         } catch (error) {
@@ -124,7 +123,7 @@ module.exports = {
 
         try {
             const result = await connection.initContract().methods.updateScheme(scheme_id, name, description, date,cost, fileName).send({from: sender})
-            transaction(req, res, result, 'Update Scheme')
+            transaction(req, res, result, 'Update Scheme', "UpdateScheme")
             const allSchemes = await connection.initContract().methods.allSchemes().call();
             // Update the values in db
             try {
@@ -162,24 +161,30 @@ module.exports = {
     },
     addMaterial : async (req, res)=> {
         const { name, cost } = req.body
+        const user = req.cookies.user_name;
         try {
             const result = await connection.initContract().methods.addMaterial(name, sender,cost).send({from: sender, gas:3000000})
             const materialCount = await connection.initContract().methods.materialCount().call();
-            console.log(result);
             const mat = await new Material({
                 material_id: materialCount,
                 name: name,
-                cost: cost
+                cost: cost,
+                supplierName: user
             }).save();
-            transaction(req, res, result, "Add Material");
-            const allMaterials = await connection.initContract().methods.allMaterials().call()
+            transaction(req, res, result, "Add Material", "AddMaterial");
+            const allMaterials = await Material.find();
+            const allNoty = await Notification.find();
+            const allQuotation = await Quotation.find();
             req.flash("success", "Materal added successfully")
-            return  res.render("userDashboard",{isValid:true,userRole:req.session.userRole,allMaterials:allMaterials })
+            return  res.render("userDashboard",{isValid:true,userRole:req.session.userRole,allMaterials:allMaterials, allNoty:allNoty ,allQuotation :allQuotation })
 
         } catch(error) {
             req.flash('error', 'Something wents wrong')
             console.log(error.message);
-            return  res.render("userDashboard",{isValid:true,userRole:req.session.userRole})
+            const allNoty = await Notification.find()
+            const allMaterials = await Material.find();
+            const allQuotation = await Quotation.find();
+            return  res.render("userDashboard",{isValid:true,userRole:req.session.userRole,allNoty:allNoty,allMaterials:allMaterials,allQuotation:allQuotation})
         }
     },
     deleteMaterial : async (req, res)=> {
@@ -191,10 +196,9 @@ module.exports = {
                     console.log(err.message);
                     return req.flash("error",err.message);
                 }
-                console.log("Deleted successful...");
                 return true;
             });
-            transaction(req, res, result, 'Delete Material')
+            transaction(req, res, result, 'Delete Material',"DeleteMaterial")
             res.status(200).json({success: "Deleted"})
 
         } catch (error) {
@@ -215,14 +219,34 @@ module.exports = {
                 cost: cost
             }, {new:true})
 
-            transaction(req, res, result, "Update Material")
+            transaction(req, res, result, "Update Material","UpdateMaterial")
             req.flash("success", "Material updated!")
-            return  res.render("userDashboard",{isValid:true,userRole:req.session.userRole, allMaterials:allMaterials})
+            const allNoty = await Notification.find();
+            const allQuotation = await Quotation.find();
+            return  res.render("userDashboard",{isValid:true,userRole:req.session.userRole, allMaterials:allMaterials,allNoty:allNoty,allQuotation:allQuotation})
 
         } catch (error) {
             console.log(error.message);
             req.flash('error', 'Updating scheme fails due to errors')
-            return  res.render("userDashboard",{isValid:true,userRole:req.session.userRole})
+            const allNoty = await Notification.find();
+            const allQuotation = await Quotation.find();
+            const allMaterials = await connection.initContract().methods.allMaterials().call()
+            return  res.render("userDashboard",{isValid:true,userRole:req.session.userRole, allMaterials:allMaterials,allNoty:allNoty,allQuotation:allQuotation})
+        }
+    },
+    myMaterials:async  (req, res)=> {
+        const user  = req.cookies.user_name;
+        try {
+            const allMaterials = await Material.find({supplierName: user});
+            const allNoty = await Notification.find();
+            const allQuotation = await Quotation.find();
+            return res.render('myMaterial', {allMaterials:allMaterials, allNoty:allNoty,allQuotation:allQuotation});
+        } catch (error) {
+            const allMaterials = await Material.find({supplierName: user});
+            const allNoty = await Notification.find();
+            const allQuotation = await Quotation.find();
+            req.flash('error', 'Something went wrong');
+            return res.render('myMaterial', {allMaterials:allMaterials, allNoty:allNoty,allQuotation:allQuotation});
         }
     },
     transactions : async (req, res) => {
@@ -232,13 +256,25 @@ module.exports = {
     },
     getTransaction: async (req, res)=> {
         const hash = req.params.hash
+        const event = req.params.event
         const data = await global.web3.eth.getTransaction(hash)
         .catch((error=> console.log(error.message)))
-        return res.status(200).json({data: data})
+
+        const rec = await connection.initContract().getPastEvents(`${event}`, {fromBlock:0})
+	    rec.forEach(event => {
+            if(hash == event.transactionHash) {
+                return res.status(200).json({data: data, event:event})
+            }
+            
+        });
+
+        // let tx_data = data.input;
+        // let input_data = '0x' + tx_data.slice(10);
+        // let params = web3.eth.abi.decodeParameters([ 'string', 'string', 'string'], input_data);
+        // console.log(params);
     },
     makeBid : async (req, res)=> {
         const { contract_id, bidAmount, contract_name } = req.body
-        console.log(contract_name);
         const userId = req.session.userId;
         let user;
         try {
@@ -248,7 +284,7 @@ module.exports = {
             req.flash('error', error.message);
         }
         
-        console.log(user.name);
+        // console.log(user.name);
         if(req.session.userRole === "contractor") {
             try {
                 const bid = await connection.initContract().methods.bidContract(sender, contract_id, bidAmount,user.name).send({from: sender, gas: 3000000});
@@ -262,14 +298,12 @@ module.exports = {
                     contractor : sender,
                     contractor_name : req.cookies.user_name
                 }).save();
-                console.log(bidDb)
-                transaction(req, res, bid, "Add Bid")
+                transaction(req, res, bid, "Add Bid","AddBid")
                 if(Object.keys(bid.events).length === 0) {
                     Bids.deleteOne({_id: bidDb._id}, function(err) {
                         if(err) {
                             console.log(err.message);
                         }
-                        console.log("successful deleted");
                     });
                     return res.status(400).json("Cannot add bid (Bid amount exceeded) or already approved")
                 }
@@ -287,20 +321,27 @@ module.exports = {
         return allBids;
     },
     approveBid: async (req, res)=> {
-        const { bid_id, contractId, bidAmount} = req.body
-        const result = await connection.initContract().methods.allocateContract(contractId, sender, bid_id).send({from: sender});
-        console.log(result);
-        // update isAppoved in db
-        try {
-        const bid = await  Bids.findOneAndUpdate({bid_id:bid_id},{
-            isApprove: true
-        }, {new:true})
-        console.log(bid) ;
-        } catch (error) {
-            console.log(error.message);
+        const { bid_id, contractId, bidAmount,contractor_name} = req.body
+        const qt = await Quotation.findOne({bid_id:bid_id})
+        if( qt.isApproved==true ) {
+
+            const result = await connection.initContract().methods.allocateContract(contractId, sender, bid_id,contractor_name).send({from: sender, gas:3000000});
+            // update isAppoved in db
+            try {
+            const bid = await  Bids.findOneAndUpdate({bid_id:bid_id},{
+                isApprove: true,
+                contractor_name:contractor_name 
+            }, {new:true})
+            transaction(req, res, result, "Approved Bid","AllocateContract");
+            return true;
+            } catch (error) {
+                console.log(error.message);
+                return false;
+            }
+        } else {
+            req.flash('error', "Waiting for quotation approval!")
+            return false;
         }
-        transaction(req, res, result, "Approved Bid");
-        return true;
     },
     getBid: async (req, res)=> {
         const {contract_id} = req.params
@@ -310,7 +351,6 @@ module.exports = {
     deleteBid: async (req, res)=> {
         try {
             const {bidId} = req.params
-            console.log(bidId);
             const bid = await connection.initContract().methods.deleteBid(bidId).send({from:sender});
  
                 Bids.deleteOne({bid_id: bidId}, function(err) {
@@ -318,10 +358,9 @@ module.exports = {
                         console.log(err.message);
                         return req.flash("error",err.message);
                     }
-                    console.log("Deleted successful...");
                     return true;
                 });
-                transaction(req, res, bid, "Delete Bid")
+                transaction(req, res, bid, "Delete Bid","DeleteBid")
             return true;
         } catch(error) {
             console.log(error.message);
@@ -355,7 +394,6 @@ module.exports = {
     getNotification: async (req, res)=> {
         try {
             const allNoty = await Notification.find();
-            console.log(allNoty);
             return allNoty;
         } catch (error) {
             console.log(error.message);
@@ -374,7 +412,7 @@ module.exports = {
                 amount : amount,
                 isAllocated : true
             }).save();
-            transaction(req, res, fund, "Fund Added")
+            transaction(req, res, fund, "Fund Added","AddFunds")
             return true;
         } catch (error) {
             console.log(error.message);
@@ -390,8 +428,7 @@ module.exports = {
             images = images +' '+ image.filename;
         });
         
-        // console.log(fund, images, status);
-        // console.log(bidID, contractName);
+        
         try {
 
         const result = await new progress({
@@ -408,5 +445,66 @@ module.exports = {
             console.log(error.message);
             return false;
         }
+    },
+    addQuta: async (req, res)=> {
+        const {names, quantity, cost, bidId } = req.body;
+        const bid = await Bids.findOne({bid_id: bidId, contractor_name: req.cookies.user_name});
+        const allBids = await Bids.find({contractor_name: req.cookies.user_name});
+        const allNoty = await Notification.find();
+        const allMaterial = await Material.find();
+        const allQuotation  = await Quotation.find({contractor_name: req.cookies.user_name});
+        if(bid != null) {
+            const contract_name = bid.contract_name;
+            let quota= [];
+            let t_amount=0;
+            let qt = [];
+            for(let i of quantity) {
+                i && qt.push(i);
+            }
+
+            names.forEach((elem,ind)=>{
+                t_amount += (qt[ind] * cost[ind]);
+                quota.push({
+                    item_name:elem,
+                    quantity : qt[ind]})
+            })
+
+            const result = await new Quotation({
+                contractor_name: req.cookies.user_name,
+                contract_name : contract_name,
+                bid_id: bidId,
+                items:quota,
+                total_amount: t_amount
+            }).save(async function(err) {
+                if(err) {
+                    console.log(err.message);
+                    req.flash("error","something went wrong");
+                    res.render('myScheme', {allBids: allBids,allNoty:allNoty,allMaterial:allMaterial,allQuotation:allQuotation})
+                } else {
+                    console.log("saved");
+                    req.flash("success","Quotation Send!");
+                    return res.render('myScheme', {allBids: allBids,allNoty:allNoty,allMaterial:allMaterial,allQuotation:allQuotation})
+                }
+            })
+        } else {
+            req.flash('error', "You are not eligible for scheme , Bid first");
+            return res.render('myScheme', {allBids: allBids,allNoty:allNoty,allMaterial:allMaterial,allQuotation:allQuotation})
+        }
+    
+    },
+    approveQuota: async (req, res)=> {
+        const {approve} = req.body;
+        try {
+            const result = await Quotation.findOneAndUpdate({_id:approve},{
+                isApproved: true
+            }, {new:true});
+            req.flash('success', "Approved!");
+            return res.redirect('/Dashboard');
+        } catch (error) {
+            console.log(error.message);
+            req.flash('error', "something went wrong");
+            return res.redirect('/Dashboard');
+        }
+
     }
 };
