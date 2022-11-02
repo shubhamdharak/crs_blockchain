@@ -1,7 +1,0 @@
-Corruption Reduction using Blockchain Technology
-
-* Bid
-    - Add the Bid
-    - Allocate Bid
-    - Delete Bid
-    - Show all the bids
