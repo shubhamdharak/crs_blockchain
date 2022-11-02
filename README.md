@@ -5,10 +5,10 @@ System is based on the Blockchain technology. it deployed on etherium blochain n
 
 ### Technology Stack
 * Etherium Mainnet - Main blockchain network
-* Solidity - solidity is laguage used for creating smart contract
-* NodeJs - For the webserver 
-* Web3 Js - To connect the blockchain to nodejs
-* MongoDB - for managing dtabase
+* Solidity - solidity is programming laguage used for creating a blockchain smart contract
+* NodeJs - For the webserver
+* Web3 Js - To connect the blockchain smart contract with nodejs
+* MongoDB - Database Management
 * Halfmoon CSS Framework - Halfmoon is a responsive front-end framework that is great for building dashboards and tools.
 * PassportJs - For Authentication Purpose
 * Ejs - for rendering the webpage (template engine)
